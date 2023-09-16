@@ -1,14 +1,12 @@
 {
     "tiempo de escala segundos": {"minimo":60,"maximo":300},
 
-    "trabajadores":{"minimo":3, "maximo":12},
     "cajeros":{"minimo":1,"maximo":4},
     "cocineros":{"minimo":1,"maximo":4},
     "meseros":{"minimo":1,"maximo":4},
 
     "platos":{"minimo":15, "maximo":50},
-    "mesas":{"minimo":4,"maximo":16},
-    "sillas":{"minimo":4,"maximo":8},
+    "vector_restaurante":{"minimo":10,"max":30},
 
     "tiempo de atencion segundos":{"minimo":3,"maximo":8},
     "tiempo lavaplatos":{"minimo":3,"maximo":5},
