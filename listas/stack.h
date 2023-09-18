@@ -2,6 +2,7 @@
 #define _STACK_ 0
 
 #include "lista.h"
+#include <class_plato.h>
 
 struct stack
 {
@@ -22,5 +23,6 @@ struct stack
         return stackList.removeFirst();
     }
 };
+stack platos_Sucios;
 
 #endif

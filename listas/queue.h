@@ -2,6 +2,7 @@
 #define _QUEUE_ 0
 
 #include "lista.h"
+#include <class_cliente.h>
 
 struct queue
 {
@@ -22,5 +23,6 @@ struct queue
         return stackList.removeFirst();
     }
 };
-
+queue fila_exterior;
+queue cajero;
 #endif
