@@ -23,6 +23,6 @@ struct stack
         return stackList.removeFirst();
     }
 };
-stack platos_Sucios;
-
+stack platos_Sucios;    // Aca llegan los platos no lavados
+stack platos_Limpios; // Stack de platos ya lavados 
 #endif

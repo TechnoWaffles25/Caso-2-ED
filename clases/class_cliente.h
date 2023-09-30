@@ -3,7 +3,8 @@ class Cliente
 {
     private:
         std::string name; /* Nombre sacado de la lista json */
-        std::string item; /* obtenido por la funcion decidirPedido */
+        std::string item; /* obtenido por la funcion decidirPedido */ // PRIMERAMENTE ES NULL
+        int numeroOrden; // Primeramente es null, es asignado cuando el cajero recibe su orden y crea el struct
     public:
         Cliente(){
             // Constructor
@@ -21,5 +22,6 @@ class Cliente
         }
         void decidirPedido(){
             /* De manera al azar se escoge un item de la lista "productos" del json */
+            // Esto es un intervalo de tiempo al azar cuando llega a las cajas
         }
 };
