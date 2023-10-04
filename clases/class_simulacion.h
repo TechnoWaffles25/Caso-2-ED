@@ -1,6 +1,8 @@
-#include <lista.h>
-#include <JSON.hpp>
+#include "listas/lista.h"
+#include "JSON.hpp"
 #include <iostream>
+#include <string>
+#include <cstdint>
 
 using JSON = dnc::JSON;
 using namespace std;
@@ -66,8 +68,10 @@ class Simulacion{
         
         void loadNombres(){
             JSON nombres;
-            nombres.parseFromFile("nombres.json");
+            nombres.parseFromFile("config.json");
+            cout << nombres["nombres"].toString() << endl;
         }
+
         void loadComidas(){
             // Carga las comidas del json a la lista comidas
         }
