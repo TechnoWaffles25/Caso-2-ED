@@ -1,13 +1,17 @@
 class Simulacion{
+
+    // La cantidad de meseros, cajeros, cocineros y clientes
     private:
-        int cTiempoEscalaSeg; // json
+        int cClientesNuevos; // Random extraido del rango de la velocidad del json.
+        int cVelocidad; // Extraido del json, fijo.
 
-        int cCajeros; // json
-        int cCocineros; // json
-        int cMeseros; // json
+        int cCajeros; // Dado por usuario
+        int cCocineros; // Dado por usuario
+        int cMeseros; // Dado por usuario
+        int cClientes; // Dado por usuario
 
-        int cPlatos; // json
-        int cVectorRest; // json
+        int cPlatos; // Dado por el usuario
+        int vector_restaurante; // Dado por el usuario, cantidad maxima de personas en el restaurante
 
         int cTiempoAtencionSeg; // json
         int cTiempoLavaplatos; // json
@@ -15,20 +19,24 @@ class Simulacion{
         int cTiempoMonchona; // json
 
     public:
+        Simulacion(){
+            // Read Json, extract variables
+            // Cargamos las variables con los setters o tambien como parametro fijo dado por el usuario
+        }
         int setTiempoEscalaSeg(int parametro){
-            // logica que restringe los valores a los que estan en el json 
+            // logica
         }
         int setCajeros(int parametro){
-            // logica que restringe los valores a los que estan en el json 
+            // logica de validacion
         }
         int setCocineros(int parametro){
-            // logica que restringe los valores a los que estan en el json 
+            // logica de validacion
         }
         int setMeseros(int parametro){
-            // logica que restringe los valores a los que estan en el json 
+            // logica de validacion
         }
         int setPlatos(int parametro){
-            // logica que restringe los valores a los que estan en el json 
+            // logica de validacion
         }
         int setVectorRestaurante(int parametro){
             // logica que restringe los valores a los que estan en el json 
@@ -45,4 +53,5 @@ class Simulacion{
         int setTiempoMonchona(int parametro){
             // logica que restringe los valores a los que estan en el json 
         }
+        
 };

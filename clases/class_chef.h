@@ -1,6 +1,8 @@
 #include <struct_pedido.h>
 #include <class_cliente.h>
 #include <class_plato.h>
+#include <stack.h>
+#include <queue.h>
 #include <string>
 
 class Chef
@@ -16,16 +18,16 @@ class Chef
         void getChef(){
             // Accesa el nombre del chef y la orden que esta cocinando
         }
-        void agarrarPlato(Plato plato){
+        Plato agarrarPlato(stack platosLavados){
             // Agarra un plato de la pila de platos
         }
         void quitarPlato(Plato plato){
             // Le quita el plato al preparar la comida
         }
-        Pedido cocinarPedido(Pedido pedido){
+        Pedido cocinarPedido(Pedido pedido, Plato plato){
             // Si tiene un plato y una orden alista un pedido en un rango de tiempo
         }
-        void alistarPedido(Pedido pedido){
+        Pedido alistarPedido(Pedido pedido, queue pedidosListos){
             /* Al terminar el pedido lo alista para ser llevado por un mesero a una mesa, transforma
             la condicion bool listo del struct pedido a true para que se comido por el cliente*/
         }
