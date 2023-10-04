@@ -4,12 +4,17 @@ class Plato
         bool limpio; /* True o False */
     public:
         Plato(){
-            // Constructor
+            limpio = false;
         }
-        void getPlato(){
-            // Accesa la condicion de limpio del plato
+        bool getPlato(){
+            return limpio;
         }
         void cambiarLimpio(){
-            // Cambia limpio por sucio y sucio por limpio
+            if (limpio=false){
+                limpio=true;
+            }
+            if (limpio=true){
+                limpio=false;
+            }
         }
 };

@@ -1,3 +1,10 @@
+#include <lista.h>
+#include <JSON.hpp>
+#include <iostream>
+
+using JSON = dnc::JSON;
+using namespace std;
+
 class Simulacion{
 
     // La cantidad de meseros, cajeros, cocineros y clientes
@@ -17,6 +24,9 @@ class Simulacion{
         int cTiempoLavaplatos; // json
         int cTiempoCocina; // json
         int cTiempoMonchona; // json
+
+        listadoble nombres; // Lista de nombres extraidos del json
+        listadoble comidas; // Lista de comidas extraidas del json
 
     public:
         Simulacion(){
@@ -54,4 +64,11 @@ class Simulacion{
             // logica que restringe los valores a los que estan en el json 
         }
         
+        void loadNombres(){
+            JSON nombres;
+            nombres.parseFromFile("nombres.json");
+        }
+        void loadComidas(){
+            // Carga las comidas del json a la lista comidas
+        }
 };
