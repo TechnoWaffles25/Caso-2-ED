@@ -10,6 +10,7 @@
 #include <functional>
 #include <sstream>
 #include <fstream>
+#include <cstdint>
 
 namespace dnc
 {

@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <cstdint>
+#include <list>
 
 using JSON = dnc::JSON;
 using namespace std;
@@ -22,17 +23,17 @@ class Simulacion{
         int cPlatos; // Dado por el usuario
         int vector_restaurante; // Dado por el usuario, cantidad maxima de personas en el restaurante
 
-        int cTiempoAtencionSeg; // json
-        int cTiempoLavaplatos; // json
-        int cTiempoCocina; // json
-        int cTiempoMonchona; // json
+        int cTiempoAtencionSeg; // rango de tiempo determinado en el json
+        int cTiempoLavaplatos; // rango de tiempo determinado en el json
+        int cTiempoCocina; // rango de tiempo determinado en el json
+        int cTiempoMonchona; // rango de tiempo determinado en el json
 
-        listadoble nombres; // Lista de nombres extraidos del json
-        listadoble comidas; // Lista de comidas extraidas del json
+        list<string> nombresJSON; // Lista de nombres extraidos del json
+        list<string> comidasJSON; // Lista de comidas extraidas del json
 
     public:
-        Simulacion(){
-            // Read Json, extract variables
+        Simulacion(int pTiempoEscala, int pCajeros, int pCocineros, int pMeseros, int pPlatos, int pVectorRestaurante){
+            loadConfig();
             // Cargamos las variables con los setters o tambien como parametro fijo dado por el usuario
         }
         int setTiempoEscalaSeg(int parametro){
@@ -51,7 +52,7 @@ class Simulacion{
             // logica de validacion
         }
         int setVectorRestaurante(int parametro){
-            // logica que restringe los valores a los que estan en el json 
+            // Logica de validacon
         }
         int setTiempoAtencionSeg(int parametro){
             // logica que restringe los valores a los que estan en el json 
@@ -66,13 +67,24 @@ class Simulacion{
             // logica que restringe los valores a los que estan en el json 
         }
         
-        void loadNombres(){
-            JSON nombres;
-            nombres.parseFromFile("config.json");
-            cout << nombres["nombres"].toString() << endl;
-        }
+        void loadConfig(){
+            JSON config;
+            config.parseFromFile("config.json");
+            //cout << "Parsed JSON: " << config.toString() << endl;
 
-        void loadComidas(){
-            // Carga las comidas del json a la lista comidas
+            auto nombresParsed = config["nombres"];
+            auto comidasParsed = config["productos"];
+            //cout << nombres["nombres"].toString() << endl;
+            //cout << comidas["productos"].toString() << endl;
+                    
+            for (auto& nombre : nombresParsed){
+                nombresJSON.push_back(nombre.toString()); // Convert the JSON object to a string before adding it to the list
+            }
+
+            for (auto& comida : comidasParsed){
+                comidasJSON.push_back(comida.toString()); // Convert the JSON object to a string before adding it to the list
+            }
+            cout << "Size nombres list: " << nombresJSON.size() << endl;
+            cout << "Size comidas list: " << comidasJSON.size() << endl;
         }
 };
