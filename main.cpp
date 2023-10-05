@@ -3,6 +3,6 @@
 
 int main(){
     Simulacion simulacion;
-    simulacion.loadNombres();
+    simulacion.loadConfig();
     return 0;
 }
