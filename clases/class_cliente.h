@@ -1,9 +1,10 @@
 #include <string>
+using namespace std;
 class Cliente
 {
     private:
-        std::string name; /* Nombre sacado de la lista json */
-        std::string item; /* obtenido por la funcion decidirPedido */ // PRIMERAMENTE ES NULL
+        string name; /* Nombre sacado de la lista json */
+        string item; /* obtenido por la funcion decidirPedido */ // PRIMERAMENTE ES NULL
         int numeroOrden; // Primeramente es null, es asignado cuando el cajero recibe su orden y crea el struct
     public:
         Cliente(){

@@ -1,10 +1,18 @@
 #include <iostream>
-#include <nlohmann/json.hpp>
-#include "json.hpp"
+#include "clases/json.hpp"
 #include "clases/class_simulacion.h"
 
 int main(){
     Simulacion simulacion;
-    simulacion.loadConfig();
+    simulacion.getRandomFood();
+    simulacion.getRandomFood();
+    simulacion.getRandomFood();
+    simulacion.getRandomFood();
+    
+    simulacion.getRandomName();
+    simulacion.getRandomName();
+    simulacion.getRandomName();
+    simulacion.getRandomName();
+
     return 0;
 }
