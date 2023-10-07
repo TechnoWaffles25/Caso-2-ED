@@ -4,6 +4,8 @@
 #include <string>
 #include <cstdint>
 #include <list>
+#include <cstdlib>
+#include <nlohmann/json.hpp>
 
 using JSON = dnc::JSON;
 using namespace std;
@@ -32,6 +34,15 @@ class Simulacion{
         list<string> comidasJSON; // Lista de comidas extraidas del json
 
     public:
+        int main() {
+            const char* cadena = "123";
+            int entero = std::atoi(cadena);
+
+            std::cout << "Valor entero: " << entero << std::endl;
+
+            return 0;
+        }
+
         Simulacion(int pTiempoEscala, int pCajeros, int pCocineros, int pMeseros, int pPlatos, int pVectorRestaurante){
             loadConfig();
             // Cargamos las variables con los setters o tambien como parametro fijo dado por el usuario
@@ -87,42 +98,42 @@ class Simulacion{
             cout << "Size nombres list: " << nombresJSON.size() << endl;
             cout << "Size comidas list: " << comidasJSON.size() << endl;
         }
-    
-    void loadAdditionalData() {
-    JSON config;
-    config.parseFromFile("config.json");
 
-    auto velocidadParsed = config["velocidad_continuidad"];
-    int minimoVelocidad = velocidadParsed["minimo"].toInt();
-    int maximoVelocidad = velocidadParsed["maximo"].toInt();
-    int intervaloVelocidad = velocidadParsed["intervalo"].toInt();
+        void loadAdditionalData() {
+            JSON config;
+            config.parseFromFile("config.json");
 
-    auto tiempoAtencionParsed = config["tiempo de atencion segundos"];
-    int minimoTiempoAtencion = tiempoAtencionParsed["minimo"].toInt();
-    int maximoTiempoAtencion = tiempoAtencionParsed["maximo"].toInt();
+            auto velocidadParsed = config["velocidad_continuidad"];
+            int minimoVelocidad = velocidadParsed["minimo"].toInt();
+            int maximoVelocidad = velocidadParsed["maximo"].toInt();
+            int intervaloVelocidad = velocidadParsed["intervalo"].toInt();
 
-    auto tiempoLavaplatosParsed = config["tiempo lavaplatos"];
-    int minimoTiempoLavaplatos = tiempoLavaplatosParsed["minimo"].toInt();
-    int maximoTiempoLavaplatos = tiempoLavaplatosParsed["maximo"].toInt();
+            auto tiempoAtencionParsed = config["tiempo de atencion segundos"];
+            int minimoTiempoAtencion = tiempoAtencionParsed["minimo"].toInt();
+            int maximoTiempoAtencion = tiempoAtencionParsed["maximo"].toInt();
 
-    auto tiempoCocinaParsed = config["tiempo cocina"];
-    int minimoTiempoCocina = tiempoCocinaParsed["minimo"].toInt();
-    int maximoTiempoCocina = tiempoCocinaParsed["maximo"].toInt();
+            auto tiempoLavaplatosParsed = config["tiempo lavaplatos"];
+            int minimoTiempoLavaplatos = tiempoLavaplatosParsed["minimo"].toInt();
+            int maximoTiempoLavaplatos = tiempoLavaplatosParsed["maximo"].toInt();
 
-    auto tiempoMonchonaParsed = config["tiempo monchona"];
-    int minimoTiempoMonchona = tiempoMonchonaParsed["minimo"].toInt();
-    int maximoTiempoMonchona = tiempoMonchonaParsed["maximo"].toInt();
+            auto tiempoCocinaParsed = config["tiempo cocina"];
+            int minimoTiempoCocina = tiempoCocinaParsed["minimo"].toInt();
+            int maximoTiempoCocina = tiempoCocinaParsed["maximo"].toInt();
 
-    cout << "Minimo Velocidad: " << minimoVelocidad << endl;
-    cout << "Maximo Velocidad: " << maximoVelocidad << endl;
-    cout << "Intervalo Velocidad: " << intervaloVelocidad << endl;
-    cout << "Minimo Tiempo de Atención: " << minimoTiempoAtencion << endl;
-    cout << "Maximo Tiempo de Atención: " << maximoTiempoAtencion << endl;
-    cout << "Minimo Tiempo Lavaplatos: " << minimoTiempoLavaplatos << endl;
-    cout << "Maximo Tiempo Lavaplatos: " << maximoTiempoLavaplatos << endl;
-    cout << "Minimo Tiempo Cocina: " << minimoTiempoCocina << endl;
-    cout << "Maximo Tiempo Cocina: " << maximoTiempoCocina << endl;
-    cout << "Minimo Tiempo Monchona: " << minimoTiempoMonchona << endl;
-    cout << "Maximo Tiempo Monchona: " << maximoTiempoMonchona << endl;
-}
+            auto tiempoMonchonaParsed = config["tiempo monchona"];
+            int minimoTiempoMonchona = tiempoMonchonaParsed["minimo"].toInt();
+            int maximoTiempoMonchona = tiempoMonchonaParsed["maximo"].toInt();
+
+            cout << "Minimo Velocidad: " << minimoVelocidad << endl;
+            cout << "Maximo Velocidad: " << maximoVelocidad << endl;
+            cout << "Intervalo Velocidad: " << intervaloVelocidad << endl;
+            cout << "Minimo Tiempo de Atención: " << minimoTiempoAtencion << endl;
+            cout << "Maximo Tiempo de Atención: " << maximoTiempoAtencion << endl;
+            cout << "Minimo Tiempo Lavaplatos: " << minimoTiempoLavaplatos << endl;
+            cout << "Maximo Tiempo Lavaplatos: " << maximoTiempoLavaplatos << endl;
+            cout << "Minimo Tiempo Cocina: " << minimoTiempoCocina << endl;
+            cout << "Maximo Tiempo Cocina: " << maximoTiempoCocina << endl;
+            cout << "Minimo Tiempo Monchona: " << minimoTiempoMonchona << endl;
+            cout << "Maximo Tiempo Monchona: " << maximoTiempoMonchona << endl;
+    }
 };
