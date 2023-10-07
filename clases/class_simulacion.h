@@ -1,40 +1,48 @@
 #include "listas/lista.h"
-#include "JSON.hpp"
+#include "json.hpp"
+//#include "JSON.hpp"
 #include <iostream>
 #include <string>
 #include <cstdint>
+#include <fstream>
 #include <list>
 #include <cstdlib>
 #include <nlohmann/json.hpp>
 
-using JSON = dnc::JSON;
+using json = nlohmann::json;
 using namespace std;
 
 class Simulacion{
 
     // La cantidad de meseros, cajeros, cocineros y clientes
     private:
-        int cClientesNuevos; // Random extraido del rango de la velocidad del json.
-        int cVelocidad; // Extraido del json, fijo.
+        int cMinutosSimulacion; // Dado por usuario por el json.
+        int cSegXMinuto; // Dado por usuario por el json.
 
-        int cCajeros; // Dado por usuario
-        int cCocineros; // Dado por usuario
-        int cMeseros; // Dado por usuario
-        int cClientes; // Dado por usuario
+        int cClientesPorLlegar; // Dado por usuario por el json.
+        int cTiempoEntreClientes; // Dado por usuario por el json.
+        int cCapacidadRestaurante; // Dado por usuario por el json.
 
-        int cPlatos; // Dado por el usuario
-        int vector_restaurante; // Dado por el usuario, cantidad maxima de personas en el restaurante
+        int cCajeros; // Dado por usuario por el json.
+        int cCocineros; // Dado por usuario por el json.
+        int cMeseros; // Dado por usuario por el json.
+        int cClientes; // Dado por usuario por el json.
+        int cPlatos; // Dado por usuario por el json.
 
-        int cTiempoAtencionSeg; // rango de tiempo determinado en el json
-        int cTiempoLavaplatos; // rango de tiempo determinado en el json
-        int cTiempoCocina; // rango de tiempo determinado en el json
-        int cTiempoMonchona; // rango de tiempo determinado en el json
+        int cTiempoAtencionSegMin; // rango de tiempo determinado en el json
+        int cTiempoAtencionSegMax; // rango de tiempo determinado en el json
+        int cTiempoLavaplatosMin; // rango de tiempo determinado en el json
+        int cTiempoLavaplatosMax; // rango de tiempo determinado en el json
+        int cTiempoCocinaMin; // rango de tiempo determinado en el json
+        int cTiempoCocinaMax; // rango de tiempo determinado en el json
+        int cTiempoMonchonaMin; // rango de tiempo determinado en el json
+        int cTiempoMonchonaMax; // rango de tiempo determinado en el json
 
         list<string> nombresJSON; // Lista de nombres extraidos del json
         list<string> comidasJSON; // Lista de comidas extraidas del json
 
     public:
-        int main() {
+        /*int main() {
             const char* cadena = "123";
             int entero = std::atoi(cadena);
 
@@ -58,99 +66,188 @@ class Simulacion{
         std::cout << "Integer Value: " << intValue << std::endl;
 
         return 0;
-    }
+        }*/
 
-        Simulacion(int pTiempoEscala, int pCajeros, int pCocineros, int pMeseros, int pPlatos, int pVectorRestaurante){
+        Simulacion(){
             loadConfig();
-            // Cargamos las variables con los setters o tambien como parametro fijo dado por el usuario
         }
-        int setTiempoEscalaSeg(int parametro){
-            // logica
+
+        // manejo de configuracion del tiempo de simulacion
+        void setMinutosSim(int parametro){
+            cMinutosSimulacion = parametro;
         }
-        int setCajeros(int parametro){
-            // logica de validacion
+        void setSegXMinuto(int parametro){
+            cSegXMinuto = parametro;
         }
-        int setCocineros(int parametro){
-            // logica de validacion
+
+        int getMinutosSim(){
+            return cMinutosSimulacion;
         }
-        int setMeseros(int parametro){
-            // logica de validacion
+        int getSegXMinuto(){
+            return cSegXMinuto;
         }
-        int setPlatos(int parametro){
-            // logica de validacion
+
+        // manejo de configuracion de clientes
+        void setClientesPorLlegar(int parametro){
+            cClientesPorLlegar = parametro;
         }
-        int setVectorRestaurante(int parametro){
-            // Logica de validacon
+        void setTiempoEntreClientes(int parametro){
+            cTiempoEntreClientes = parametro;
         }
-        int setTiempoAtencionSeg(int parametro){
-            // logica que restringe los valores a los que estan en el json 
+        void setCapacidadRestaurante(int parametro){
+            cCapacidadRestaurante = parametro;
         }
-        int setTiempoLavaplatos(int parametro){
-            // logica que restringe los valores a los que estan en el json 
+
+        int getClientesPorLlegar(){
+            return cClientesPorLlegar;
         }
-        int setTiempoCocina(int parametro){
-            // logica que restringe los valores a los que estan en el json 
+        int getTiempoEntreClientes(){
+            return cTiempoEntreClientes;
         }
-        int setTiempoMonchona(int parametro){
-            // logica que restringe los valores a los que estan en el json 
+        int getCapacidadRestaurante(){
+            return cCapacidadRestaurante;
+        }
+
+        // cantidad de empleados por rol
+        void setCajeros(int parametro){
+            cCajeros = parametro;
+        }
+        void setCocineros(int parametro){
+            cCocineros = parametro;
+        }
+        void setMeseros(int parametro){
+            cMeseros = parametro;
+        }
+        void setClientes(int parametro){
+            cClientes = parametro;
+        }
+        void setPlatos(int parametro){
+            cPlatos = parametro;
+        }
+
+        int getCajeros(){
+            return cCajeros;
+        }
+        int getCocineros(){
+            return cCocineros;
+        }
+        int getMeseros(){
+            return cMeseros;
+        }
+        int getClientes(){
+            return cClientes;
+        }
+        int getPlatos(){
+            return cPlatos;
+        }
+
+        // rangos de tiempo de atencion de cada empleado para su actividad
+        void setTiempoAtencionSegMin(int parametro){
+            cTiempoAtencionSegMin = parametro;
+        }
+        void setTiempoAtencionSegMax(int parametro){
+            cTiempoAtencionSegMax = parametro;
+        }
+        void setTiempoLavaplatosMin(int parametro){
+            cTiempoLavaplatosMin = parametro;
+        }
+        void setTiempoLavaplatosMax(int parametro){
+            cTiempoLavaplatosMax = parametro;
+        }
+        void setTiempoCocinaMin(int parametro){
+            cTiempoCocinaMin = parametro; 
+        }
+        void setTiempoCocinaMax(int parametro){
+            cTiempoCocinaMax = parametro;
+        }
+        void setTiempoMonchonaMin(int parametro){
+            cTiempoMonchonaMin = parametro;
+        }
+        void setTiempoMonchonaMax(int parametro){
+            cTiempoMonchonaMax = parametro;
         }
         
-        void loadConfig(){
-            JSON config;
-            config.parseFromFile("config.json");
-            //cout << "Parsed JSON: " << config.toString() << endl;
-
-            auto nombresParsed = config["nombres"];
-            auto comidasParsed = config["productos"];
-            //cout << nombres["nombres"].toString() << endl;
-            //cout << comidas["productos"].toString() << endl;
-                    
-            for (auto& nombre : nombresParsed){
-                nombresJSON.push_back(nombre.toString()); // Convert the JSON object to a string before adding it to the list
-            }
-
-            for (auto& comida : comidasParsed){
-                comidasJSON.push_back(comida.toString()); // Convert the JSON object to a string before adding it to the list
-            }
-            cout << "Size nombres list: " << nombresJSON.size() << endl;
-            cout << "Size comidas list: " << comidasJSON.size() << endl;
+        int getTiempoAtencionSegMin(){
+            return cTiempoAtencionSegMin;
+        }
+        int getTiempoAtencionSegMax(){
+            return cTiempoAtencionSegMax;
+        }
+        int getTiempoLavaplatosMin(){
+            return cTiempoLavaplatosMin;
+        }
+        int getTiempoLavaplatosMax(){
+            return cTiempoLavaplatosMax;
+        }
+        int getTiempoCocinaMin(){
+            return cTiempoCocinaMin;
+        }
+        int getTiempoCocinaMax(){
+            return cTiempoCocinaMax;
+        }
+        int getTiempoMonchonaMin(){
+            return cTiempoMonchonaMin;
+        }
+        int getTiempoMonchonaMax(){
+            return cTiempoMonchonaMax;
         }
 
-        void loadAdditionalData() {
-            JSON config;
-            config.parseFromFile("config.json");
+        // Cargamos la configuracion del json
+        void Simulacion::loadConfig() {
+            std::ifstream file("config.json");
+            json data;
+            file >> data;
 
-            auto velocidadParsed = config["velocidad_continuidad"];
-            int minimoVelocidad = velocidadParsed["minimo"].toInt();
-            int maximoVelocidad = velocidadParsed["maximo"].toInt();
-            int intervaloVelocidad = velocidadParsed["intervalo"].toInt();
+            cMinutosSimulacion = data["minutos"].get<int>();
+            cSegXMinuto = data["segundos por minuto"].get<int>();
 
-            auto tiempoAtencionParsed = config["tiempo de atencion segundos"];
-            int minimoTiempoAtencion = tiempoAtencionParsed["minimo"].toInt();
-            int maximoTiempoAtencion = tiempoAtencionParsed["maximo"].toInt();
+            cClientesPorLlegar = data["clientes por llegar"].get<int>();
+            cTiempoEntreClientes = data["tiempo entre clientes"].get<int>();
+            cCapacidadRestaurante = data["capacidad restaurante"].get<int>();
 
-            auto tiempoLavaplatosParsed = config["tiempo lavaplatos"];
-            int minimoTiempoLavaplatos = tiempoLavaplatosParsed["minimo"].toInt();
-            int maximoTiempoLavaplatos = tiempoLavaplatosParsed["maximo"].toInt();
+            cCajeros = data["cajeros"].get<int>();
+            cCocineros = data["cocineros"].get<int>();
+            cMeseros = data["meseros"].get<int>();
+            cPlatos = data["platos"].get<int>();
 
-            auto tiempoCocinaParsed = config["tiempo cocina"];
-            int minimoTiempoCocina = tiempoCocinaParsed["minimo"].toInt();
-            int maximoTiempoCocina = tiempoCocinaParsed["maximo"].toInt();
+            cTiempoAtencionSegMin = data["tiempo atencion seg min"].get<int>();
+            cTiempoAtencionSegMax = data["tiempo atencion seg max"].get<int>();
+            cTiempoLavaplatosMin = data["tiempo lavaplatos seg min"].get<int>();
+            cTiempoLavaplatosMax = data["tiempo lavaplatos seg max"].get<int>();
+            cTiempoCocinaMin = data["tiempo cocina seg min"].get<int>();
+            cTiempoCocinaMax = data["tiempo cocina seg max"].get<int>();
+            cTiempoMonchonaMin = data["tiempo monchona seg min"].get<int>();
+            cTiempoMonchonaMax = data["tiempo monchona seg max"].get<int>();
+            
+            // Setteamos los valores
+            setMinutosSim(cMinutosSimulacion);
+            setSegXMinuto(cSegXMinuto);
+            
+            setClientesPorLlegar(cClientesPorLlegar);
+            setTiempoEntreClientes(cTiempoEntreClientes);
+            setCapacidadRestaurante(cCapacidadRestaurante);
 
-            auto tiempoMonchonaParsed = config["tiempo monchona"];
-            int minimoTiempoMonchona = tiempoMonchonaParsed["minimo"].toInt();
-            int maximoTiempoMonchona = tiempoMonchonaParsed["maximo"].toInt();
+            setCajeros(cCajeros);
+            setCocineros(cCocineros);
+            setMeseros(cMeseros);
+            setPlatos(cPlatos);
 
-            cout << "Minimo Velocidad: " << minimoVelocidad << endl;
-            cout << "Maximo Velocidad: " << maximoVelocidad << endl;
-            cout << "Intervalo Velocidad: " << intervaloVelocidad << endl;
-            cout << "Minimo Tiempo de Atención: " << minimoTiempoAtencion << endl;
-            cout << "Maximo Tiempo de Atención: " << maximoTiempoAtencion << endl;
-            cout << "Minimo Tiempo Lavaplatos: " << minimoTiempoLavaplatos << endl;
-            cout << "Maximo Tiempo Lavaplatos: " << maximoTiempoLavaplatos << endl;
-            cout << "Minimo Tiempo Cocina: " << minimoTiempoCocina << endl;
-            cout << "Maximo Tiempo Cocina: " << maximoTiempoCocina << endl;
-            cout << "Minimo Tiempo Monchona: " << minimoTiempoMonchona << endl;
-            cout << "Maximo Tiempo Monchona: " << maximoTiempoMonchona << endl;
-    }
+            setTiempoAtencionSegMin(cTiempoAtencionSegMin);
+            setTiempoAtencionSegMax(cTiempoAtencionSegMax);
+            setTiempoLavaplatosMin(cTiempoLavaplatosMin);
+            setTiempoLavaplatosMax(cTiempoLavaplatosMax);
+            setTiempoCocinaMin(cTiempoCocinaMin);
+            setTiempoCocinaMax(cTiempoCocinaMax);
+            setTiempoMonchonaMin(cTiempoMonchonaMin);
+            setTiempoMonchonaMax(cTiempoMonchonaMax);
+
+            // Cargamos los nombres
+            for (auto& nombre : data["nombres"]) {
+                nombresJSON.push_back(nombre.get<string>());
+            }
+            // Cargamos las comidas
+            for (auto& comida : data["comidas"]) {
+                comidasJSON.push_back(comida.get<string>());
+            }
+        }
 };
