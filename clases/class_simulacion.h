@@ -43,6 +43,23 @@ class Simulacion{
             return 0;
         }
 
+        int main() {
+        // Parse a JSON value
+        json jsonData = R"(
+            {
+                "intValue": 42,
+                "stringValue": "Hello, JSON!"
+            }
+        )"_json;
+
+        // Extract and convert JSON values to integers
+        int intValue = jsonData["intValue"].get<int>();
+
+        std::cout << "Integer Value: " << intValue << std::endl;
+
+        return 0;
+    }
+
         Simulacion(int pTiempoEscala, int pCajeros, int pCocineros, int pMeseros, int pPlatos, int pVectorRestaurante){
             loadConfig();
             // Cargamos las variables con los setters o tambien como parametro fijo dado por el usuario
