@@ -2,6 +2,7 @@
 #define CLIENTE_H
 
 #include <string>
+#include <sstream>
 #include "class_randomgenerator.h"
 using namespace std;
 class Cliente
