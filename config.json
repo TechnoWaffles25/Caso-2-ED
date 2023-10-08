@@ -2,7 +2,7 @@
     "minutos simulacion":10,
     "segundos por minuto":5,
 
-    "clientes por llegar":50,
+    "clientes por llegar":10,
     "tiempo entre clientes": 5,
     "capacidad restaurante": 20,
 
