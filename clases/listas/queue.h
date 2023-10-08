@@ -23,6 +23,6 @@ struct queue
     }
 };
 queue fila_exterior; // Cola donde llegan primeramente los clientes, pueden entrar al restaurante o salir si esta muy lento
-queue ordenesPendientes; // Cola donde se van los pedidos apuntados por los cajeros
+queue pedidosPendientes; // Cola donde se van los pedidos apuntados por los cajeros
 queue pedidosListos; // Cola donde van los pedidos terminados por los cocineros y seran recogidos por los meseros
 #endif

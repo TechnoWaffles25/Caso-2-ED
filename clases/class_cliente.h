@@ -14,7 +14,7 @@ class Cliente
         RandomGenerator randomGenerator; // Para generar su pedido y nombre random
     public:
         static int contadorPedidos; // Static variable para contar el numero de ordenes entre todos los clientes
-        
+        static int contadorPedidos2; // Static variable para contar el numero de ordenes entre todos los clientes
         // Constrcutor
         Cliente(){
             setName();

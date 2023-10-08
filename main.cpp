@@ -2,8 +2,10 @@
 #include "clases/class_simulacion.h"
 #include "clases/class_randomgenerator.h"
 #include "clases/class_cliente.h"
+#include "clases/class_cajero.h"
 #include "clases/listas/queue.h"
 #include "clases/listas/stack.h"
+
 
 #include <iostream>
 #include <thread>
@@ -12,6 +14,8 @@
 using namespace std;
 
 int Cliente::contadorPedidos = 1;
+int Cliente::contadorPedidos2 = 1;
+
 Simulacion simulacion;
 RandomGenerator randomGenerator;
 
@@ -25,33 +29,64 @@ void llegadaClientes()
     for (int i = 0; i < *clientAmount; i++)
     {
         Cliente *newCliente = new Cliente();
+        cout << "\nLlego un cliente" << endl;
         fila_exterior.enqueue(newCliente);
-        cout << "Llego un cliente" << endl;
         this_thread::sleep_for(*tiempoEntreClientes * std::chrono::seconds(1));
     }
 }
 
-void bar(int x)
-{
-    cout << "bar: " << x << endl;
+void operationCajero()
+{   
+    using namespace std::literals::chrono_literals;
+
+    vector<Cajero*> cajeros;
+    int* numCajeros = simulacion.getCajeros();
+
+    int* atencionCajeroMin = simulacion.getTiempoAtencionSegMin();
+    int* atencionCajerMax = simulacion.getTiempoAtencionSegMax();
+
+    for (int i = 0; i < *numCajeros; i++)
+    {
+        string cajeroName = "Cajero " + to_string(i + 1);
+        Cajero* newCajero = new Cajero(cajeroName);
+        cajeros.push_back(newCajero);
+        cout << "\nSe ha creado un cajero llamado " << newCajero->getName() << endl;
+    }
+
+    while (!fila_exterior.isEmpty())
+    {
+        for (int i = 0; i < *numCajeros; i++)
+        {
+            cout << "\nloop" << i << endl;
+
+            if (cajeros[i]->getClienteActual() == nullptr && !fila_exterior.isEmpty()) {
+                void* ptr = fila_exterior.dequeue();
+                Cliente* cliente = static_cast<Cliente*>(ptr);
+                cajeros[i]->setClienteActual(cliente);
+                cajeros[i]->atenderCliente();
+                this_thread::sleep_for(*atencionCajeroMin * std::chrono::seconds(1));
+                Pedido* pedido = cajeros[i]->apuntarOrden();
+                cajeros[i]->comunicarOrden(pedido);
+            }
+    }
+    cout << "Sale del while" << endl;
 }
+
 
 int main(void)
 {
-    thread first (llegadaClientes);     // spawn new thread that calls foo()
-    thread second (bar,0);  // spawn new thread that calls bar(0)
+    // Create a thread for the llegadaClientes() function
+    thread clientesThread(llegadaClientes);
 
-    cout << "main, foo and llegada now execute concurrently...\n";
+    // Create a thread for the operationCajero() function
+    thread cajeroThread(operationCajero);
 
-    // synchronize threads:
-    first.join(); // pauses until first finishes
-    second.join(); // pauses until second finishes
+    // Wait for both threads to finish
+    clientesThread.join();
+    cajeroThread.join();
 
-    cout << "llegada and bar completed.\n";
-
+    return 0;
     
-
-
     /*cout << "------------------------------------" << endl;
     randomGenerator.getRandomFood();
     randomGenerator.getRandomFood();
@@ -74,6 +109,4 @@ int main(void)
     cout << cliente2.toString() << endl;
     cout << "------------------------------------" << endl;
     cout << cliente3.toString() << endl;*/
-
-    return 0;
 }

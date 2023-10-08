@@ -10,11 +10,11 @@ class Plato
             return limpio;
         }
         void cambiarLimpio(){
-            if (limpio=false){
-                limpio=true;
-            }
-            if (limpio=true){
+            if (limpio){
                 limpio=false;
+            }
+            if (!limpio){
+                limpio=true;
             }
         }
 };

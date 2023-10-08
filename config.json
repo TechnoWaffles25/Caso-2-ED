@@ -3,7 +3,7 @@
     "segundos por minuto":5,
 
     "clientes por llegar":10,
-    "tiempo entre clientes": 3,
+    "tiempo entre clientes": 5,
     "capacidad restaurante": 20,
 
     "cajeros": 2,
@@ -12,7 +12,7 @@
     "cocineros": 3,
     "platos": 20,
 
-    "tiempo en caja":{"minimo":3,"maximo":8},
+    "tiempo en caja":{"minimo":6,"maximo":8},
     "tiempo lavaplatos":{"minimo":3,"maximo":5},
     "tiempo cocina":{"minimo":8,"maximo":20},
     "tiempo monchona":{"minimo":6,"maximo":10},

@@ -1,8 +1,8 @@
-#include <struct_pedido.h>
-#include <class_cliente.h>
-#include <class_plato.h>
-#include <stack.h>
-#include <queue.h>
+#include "struct_pedido.h"
+#include "class_cliente.h"
+#include "class_plato.h"
+#include "listas/stack.h"
+#include "listas/queue.h"
 #include <string>
 
 class Chef
