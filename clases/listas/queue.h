@@ -2,7 +2,6 @@
 #define _QUEUE_ 0
 
 #include "lista.h"
-#include <class_cliente.h>
 
 struct queue
 {

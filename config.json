@@ -3,7 +3,7 @@
     "segundos por minuto":5,
 
     "clientes por llegar":10,
-    "tiempo entre clientes": 5,
+    "tiempo entre clientes": 3,
     "capacidad restaurante": 20,
 
     "cajeros": 2,

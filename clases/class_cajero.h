@@ -2,7 +2,7 @@
 #include <class_cliente.h>
 #include <class_chef.h>
 #include <struct_pedido.h>
-#include <queue.h>
+#include <listas/queue.h>
 #include <string>
 
 class Cajero
