@@ -5,6 +5,7 @@
 #include "clases/class_cajero.h"
 #include "clases/listas/queue.h"
 #include "clases/listas/stack.h"
+#include <random>
 
 
 #include <iostream>
@@ -53,23 +54,20 @@ void operationCajero()
         cout << "\nSe ha creado un cajero llamado " << newCajero->getName() << endl;
     }
 
-    while (!fila_exterior.isEmpty())
-    {
-        for (int i = 0; i < *numCajeros; i++)
-        {
-            cout << "\nloop" << i << endl;
-
-            if (cajeros[i]->getClienteActual() == nullptr && !fila_exterior.isEmpty()) {
-                void* ptr = fila_exterior.dequeue();
-                Cliente* cliente = static_cast<Cliente*>(ptr);
-                cajeros[i]->setClienteActual(cliente);
-                cajeros[i]->atenderCliente();
-                this_thread::sleep_for(*atencionCajeroMin * std::chrono::seconds(1));
-                Pedido* pedido = cajeros[i]->apuntarOrden();
-                cajeros[i]->comunicarOrden(pedido);
-            }
+    while (!fila_exterior.isEmpty()) {
+    for (int i = 0; i < *numCajeros && !fila_exterior.isEmpty(); i++) {
+        cout << "\nCajero " << i << " está sirviendo." << endl;
+        void* ptr = fila_exterior.dequeue();
+        Cliente* cliente = static_cast<Cliente*>(ptr);
+        cajeros[i]->setClienteActual(cliente);
+        cajeros[i]->atenderCliente();
+        int serveTime = 5;
+        this_thread::sleep_for(serveTime * std::chrono::seconds(1));
+        Pedido* pedido = cajeros[i]->apuntarOrden();
+        cajeros[i]->comunicarOrden(pedido);
     }
-    cout << "Sale del while" << endl;
+}
+cout << "Todos los clientes fueron servidos" << endl;
 }
 
 
@@ -84,8 +82,6 @@ int main(void)
     // Wait for both threads to finish
     clientesThread.join();
     cajeroThread.join();
-
-    return 0;
     
     /*cout << "------------------------------------" << endl;
     randomGenerator.getRandomFood();
