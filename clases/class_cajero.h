@@ -44,11 +44,13 @@ class Cajero
         }
 
         void atenderCliente(){
-            if (!fila_exterior.isEmpty()){
-                clienteActual = (Cliente*)fila_exterior.dequeue();
-                clienteCajero.push(clienteActual);
-                cout << "\nEl cajero " << name << " esta atendiendo al cliente " << clienteActual->getName() << endl;
-            }
+            while (!fila_exterior.isEmpty()) {
+            clienteActual = (Cliente*)fila_exterior.dequeue();
+            clienteCajero.push(clienteActual);
+            cout << "\nEl cajero " << name << " está atendiendo al cliente " << clienteActual->getName() << endl;
+            Pedido* pedido = apuntarOrden();
+            comunicarOrden(pedido);
+    }
         }
         void comunicarOrden(Pedido* pedido){
             pedidosPendientes.enqueue(&pedido);
