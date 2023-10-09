@@ -69,6 +69,7 @@ void operationCajero()
                 cajeros[i]->comunicarOrden(pedido);
             }
     }
+    }
     cout << "Sale del while" << endl;
 }
 
@@ -84,8 +85,6 @@ int main(void)
     // Wait for both threads to finish
     clientesThread.join();
     cajeroThread.join();
-
-    return 0;
     
     /*cout << "------------------------------------" << endl;
     randomGenerator.getRandomFood();
