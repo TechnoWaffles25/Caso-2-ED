@@ -56,7 +56,7 @@ void operationCajero()
 
     while (!fila_exterior.isEmpty()) {
     for (int i = 0; i < *numCajeros && !fila_exterior.isEmpty(); i++) {
-        cout << "\nCajero " << i << " is serving a customer." << endl;
+        cout << "\nCajero " << i << " está sirviendo." << endl;
         void* ptr = fila_exterior.dequeue();
         Cliente* cliente = static_cast<Cliente*>(ptr);
         cajeros[i]->setClienteActual(cliente);
@@ -67,7 +67,7 @@ void operationCajero()
         cajeros[i]->comunicarOrden(pedido);
     }
 }
-cout << "All customers have been served." << endl;
+cout << "Todos los clientes fueron servidos" << endl;
 }
 
 
