@@ -16,6 +16,9 @@
 #include <chrono>
 
 using namespace std;
+using namespace std::this_thread;
+using namespace std::chrono;
+using namespace nlohmann::json_literals;
 
 class threads
 {
@@ -26,8 +29,6 @@ class threads
 
         void llegadaClientes() 
         {   
-            using namespace std::literals::chrono_literals;
-
             int* clientAmount = simulacion.getClientesPorLlegar();
             int* tiempoEntreClientes = simulacion.getTiempoEntreClientes();
 
@@ -36,7 +37,7 @@ class threads
                 Cliente *newCliente = new Cliente();
                 cout << "\nLlego un cliente" << endl;
                 fila_exterior.enqueue(newCliente);
-                this_thread::sleep_for(*tiempoEntreClientes * std::chrono::seconds(1));
+                this_thread::sleep_for(*tiempoEntreClientes * seconds(1));
             }
         }
 };
