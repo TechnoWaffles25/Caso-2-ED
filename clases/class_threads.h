@@ -2,12 +2,12 @@
 #define THREADS_H
 
 #include "json.hpp"
-#include "clases/class_simulacion.h"
-#include "clases/class_randomgenerator.h"
-#include "clases/class_cliente.h"
-#include "clases/class_cajero.h"
-#include "clases/listas/queue.h"
-#include "clases/listas/stack.h"
+#include "class_simulacion.h"
+#include "class_randomgenerator.h"
+#include "class_cliente.h"
+#include "class_cajero.h"
+#include "listas/queue.h"
+#include "listas/stack.h"
 #include <random>
 
 

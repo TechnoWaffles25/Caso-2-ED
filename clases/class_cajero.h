@@ -7,7 +7,6 @@
 #include "struct_pedido.h"
 #include "listas/queue.h"
 #include "listas/stack.h"
-#include "class_manager.h"
 #include <string>
 
 class Cajero
@@ -15,15 +14,13 @@ class Cajero
     private:
         string name; /* Nombre sacado de la lista json */
         RandomGenerator randomGenerator;
-
         stack clienteCajero; // Stack para almacenar el cliente que esta siendo atendido
         Cliente* clienteActual; // Puntero al cliente que se esta atendiendo en este momento
     public:
         static int contadorPedidos; // Static variable para contar el numero de ordenes entre todos los clientes    
-        Cajero(string name, Manager& manager){
+        Cajero(string name){
             setName(name);
             clienteActual = nullptr;
-            manager.addCajero(this);
         }
 
         string getName(){

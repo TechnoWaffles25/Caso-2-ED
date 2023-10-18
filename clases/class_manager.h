@@ -3,50 +3,52 @@
 
 #include "class_cajero.h"
 #include "class_chef.h"
-#include "class_mesero.h"
-#include "class_lavaplatos.h"
+#include <vector>
 
-#include <string>
-#include <sstream>
-
-using namespace std;
-
-class Manager
-{
+class CajeroManager {
     private:
         vector<Cajero*> cajeros;
-        vector<Chef*> chefs;
-        vector<Mesero*> meseros;
-        vector<Lavaplatos*> lavaplatos;
 
     public:
-        vector<Cajero*> getCajeros() const {
+        void addCajero(Cajero* pCajero){
+            cajeros.push_back(pCajero);
+        }
+        vector<Cajero*> getCajeros() const{
             return cajeros;
         }
+};
 
-        vector<Chef*> getChefs() const {
+class ChefManager {
+    private:
+        vector<Chef*> chefs;
+
+    public:
+        void addChef(Chef* pChef){
+            chefs.push_back(pChef);
+        }	
+        vector<Chef*> getChefs() const{
             return chefs;
         }
+};
 
-        vector<Mesero*> getMeseros() const {
-            return meseros;
-        }
+class Manager {
+    private:
+        CajeroManager cajeroManager;
+        ChefManager chefManager;
 
-        vector<Lavaplatos*> getLavaplatos() const {
-            return lavaplatos;
+    public:
+        void addCajero(Cajero* pCajero) {
+            cajeroManager.addCajero(pCajero);
         }
-
-        void addCajero(Cajero* cajero) {
-            cajeros.push_back(cajero);
+        void addChef(Chef* pChef) {
+            chefManager.addChef(pChef);
         }
-        void addChef(Chef* chef) {
-            chefs.push_back(chef);
+        vector<Cajero*> getCajeros() const{
+            return cajeroManager.getCajeros();
         }
-        void addMesero(Mesero* mesero) {
-            meseros.push_back(mesero);
-        }
-        void addLavaplatos(Lavaplatos* lavaplat) {
-            lavaplatos.push_back(lavaplat);
+        vector<Chef*> getChefs() const{
+            return chefManager.getChefs();
         }
 };
+
 #endif // MANAGER_H

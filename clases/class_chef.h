@@ -1,3 +1,6 @@
+#ifndef CLASS_CHEF_H
+#define CLASS_CHEF_H
+
 #include "struct_pedido.h"
 #include "class_cliente.h"
 #include "class_plato.h"
@@ -32,3 +35,4 @@ class Chef
             la condicion bool listo del struct pedido a true para que se comido por el cliente*/
         }
 };
+#endif // CLASS_CHEF_H

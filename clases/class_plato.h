@@ -1,3 +1,5 @@
+#ifndef CLASS_PLATO_H
+#define CLASS_PLATO_H
 class Plato
 {
     private:
@@ -13,3 +15,4 @@ class Plato
             limpio = !limpio;
         }
 };
+#endif // CLASS_PLATO_H
