@@ -13,8 +13,7 @@ class Cliente
         int numeroOrden; /* Se settea con la funcion setNumeroOrden y es unico para cada cliente*/
         RandomGenerator randomGenerator; // Para generar su pedido y nombre random
     public:
-        static int contadorPedidos; // Static variable para contar el numero de ordenes entre todos los clientes
-        static int contadorPedidos2; // Static variable para contar el numero de ordenes entre todos los clientes
+        static int contadorNumOrden; // Static variable para contar el numero de ordenes entre todos los clientes
         // Constrcutor
         Cliente(){
             setName();
@@ -30,8 +29,8 @@ class Cliente
             item = randomGenerator.getRandomFood();
         }
         void setNumeroOrden(){
-            numeroOrden = contadorPedidos;
-            contadorPedidos++;
+            numeroOrden = contadorNumOrden;
+            contadorNumOrden++;
         }
 
         // Getters
@@ -61,4 +60,5 @@ class Cliente
             return ss.str();
         }
 };
+int Cliente::contadorNumOrden = 1;
 #endif // CLIENTE_H

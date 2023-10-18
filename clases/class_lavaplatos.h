@@ -1,6 +1,6 @@
 #include <string>
-#include <listas/stack.h>
-#include <class_plato.h>
+#include "listas/stack.h"
+#include "class_plato.h"
 
 class Lavaplatos
     {

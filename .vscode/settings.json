@@ -61,5 +61,6 @@
         "iomanip": "cpp",
         "mutex": "cpp",
         "valarray": "cpp"
-    }
+    },
+    "cmake.sourceDirectory": "/Users/amontero/Desktop/C++/Caso-2-ED/clases/json-develop"
 }

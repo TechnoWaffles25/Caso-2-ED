@@ -1,9 +1,13 @@
+#ifndef CAJERO_H
+#define CAJERO_H
+
 #include "struct_pedido.h"
 #include "class_cliente.h"
 //#include "class_chef.h"
 #include "struct_pedido.h"
 #include "listas/queue.h"
 #include "listas/stack.h"
+#include "class_manager.h"
 #include <string>
 
 class Cajero
@@ -15,10 +19,11 @@ class Cajero
         stack clienteCajero; // Stack para almacenar el cliente que esta siendo atendido
         Cliente* clienteActual; // Puntero al cliente que se esta atendiendo en este momento
     public:
-        
-        Cajero(string name){
+        static int contadorPedidos; // Static variable para contar el numero de ordenes entre todos los clientes    
+        Cajero(string name, Manager& manager){
             setName(name);
             clienteActual = nullptr;
+            manager.addCajero(this);
         }
 
         string getName(){
@@ -37,9 +42,9 @@ class Cajero
         Pedido* apuntarOrden(){
             Pedido* pedido = new Pedido();
             pedido->item = new string(clienteActual->getItem());
-            pedido->num_orden = new int(Cliente::contadorPedidos2);
+            pedido->num_orden = new int(contadorPedidos);
             pedido->listo = new bool(false);
-            Cliente::contadorPedidos2++;
+            contadorPedidos++;
             return pedido;
         }
 
@@ -58,3 +63,5 @@ class Cajero
             cout << "\nEl cajero " << name << " le ha comunicado al chef que el cliente " << clienteActual->getName() << " ha pedido " << &pedido->item << endl;
         }
 };
+int Cajero::contadorPedidos = 1;
+#endif // CAJERO_H
