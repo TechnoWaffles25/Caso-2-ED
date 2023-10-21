@@ -29,7 +29,8 @@ class Simulacion{
         int* cSegXMinuto; // Dado por usuario por el json.
 
         int* cClientesPorLlegar; // Dado por usuario por el json.
-        int* cTiempoEntreClientes; // Dado por usuario por el json.
+        int* cTiempoEntreClientesMin; // Dado por usuario por el json.
+        int* cTiempoEntreClientesMax; // Dado por usuario por el json.
         int* cCapacidadRestaurante; // Dado por usuario por el json.
 
         int* cCajeros; // Dado por usuario por el json.
@@ -98,8 +99,11 @@ class Simulacion{
         void setClientesPorLlegar(int* parametro){
             cClientesPorLlegar = parametro;
         }
-        void setTiempoEntreClientes(int* parametro){
-            cTiempoEntreClientes = parametro;
+        void setTiempoEntreClientesMin(int* parametro){
+            cTiempoEntreClientesMin = parametro;
+        }
+        void setTiempoEntreClientesMax(int* parametro){
+            cTiempoEntreClientesMax = parametro;
         }
         void setCapacidadRestaurante(int* parametro){
             cCapacidadRestaurante = parametro;
@@ -108,8 +112,11 @@ class Simulacion{
         int* getClientesPorLlegar(){
             return cClientesPorLlegar;
         }
-        int* getTiempoEntreClientes(){
-            return cTiempoEntreClientes;
+        int* getTiempoEntreClientesMin(){
+            return cTiempoEntreClientesMin;
+        }
+        int* getTiempoEntreClientesMax(){
+            return cTiempoEntreClientesMax;
         }
         int* getCapacidadRestaurante(){
             return cCapacidadRestaurante;
@@ -215,7 +222,8 @@ class Simulacion{
             cSegXMinuto = new int(data["segundos por minuto"].get<int>());
 
             cClientesPorLlegar = new int(data["clientes por llegar"].get<int>());
-            cTiempoEntreClientes = new int(data["tiempo entre clientes"].get<int>());
+            cTiempoEntreClientesMin = new int(data["tiempo entre clientes min"].get<int>());
+            cTiempoEntreClientesMax = new int(data["tiempo entre clientes max"].get<int>());
             cCapacidadRestaurante = new int(data["capacidad restaurante"].get<int>());
 
             cCajeros = new int(data["cajeros"].get<int>());
@@ -238,7 +246,8 @@ class Simulacion{
             setSegXMinuto(cSegXMinuto);
             
             setClientesPorLlegar(cClientesPorLlegar);
-            setTiempoEntreClientes(cTiempoEntreClientes);
+            setTiempoEntreClientesMin(cTiempoEntreClientesMin);
+            setTiempoEntreClientesMax(cTiempoEntreClientesMax);
             setCapacidadRestaurante(cCapacidadRestaurante);
 
             setCajeros(cCajeros);
@@ -261,7 +270,8 @@ class Simulacion{
             cout << "Minutos de simulacion: " << *getMinutosSim() << endl;
             cout << "Segundos por minuto: " << *getSegXMinuto() << endl;
             cout << "Clientes por llegar: " << *getClientesPorLlegar() << endl;
-            cout << "Tiempo entre clientes: " << *getTiempoEntreClientes() << endl;
+            cout << "Tiempo entre clientes Min: " << *getTiempoEntreClientesMin() << endl;
+            cout << "Tiempo entre clientes Max: " << *getTiempoEntreClientesMax() << endl;
             cout << "Capacidad restaurante: " << *getCapacidadRestaurante() << endl;
             cout << "Cajeros: " << *getCajeros() << endl;
             cout << "Cocineros: " << *getCocineros() << endl;

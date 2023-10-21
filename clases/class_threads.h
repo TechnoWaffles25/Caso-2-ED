@@ -36,14 +36,20 @@ class threads
             managerCajero = pManagerCajero;
             fila_exterior = pFilaExterior;
         }
+
         void cargarClientes(){
             this_thread::sleep_for(2s);
-            cout << "Entro a cargar clientes" << endl;
-
+            int* tiemopAtencionMin = simulacion.getTiempoAtencionSegMin();
+            int* tiemopAtencionMax = simulacion.getTiempoAtencionSegMax();
             while (true) {
 
                 if (!fila_exterior->isEmpty()) {
                     this_thread::sleep_for(4s);
+                    // Create a random number generator engine
+                    random_device rd;  // Seed the engine
+                    mt19937 mt(rd());  // Mersenne Twister pseudo-random number generator
+                    uniform_int_distribution<int> distribution(*tiemopAtencionMin,*tiemopAtencionMax);
+                    int tiempoRandom = distribution(mt);
                     for (Cajero* cajero : managerCajero->getCajeros()){
 
                         if (cajero->getClienteActual() == nullptr && !fila_exterior->isEmpty()){
@@ -51,7 +57,7 @@ class threads
                             cajero->setClienteActual(cliente);
                             cout << "\nEl cajero " << cajero->getName() << " está atendiendo al cliente " << cliente->getName() << endl;
                             Pedido* pedido = cajero->apuntarOrden();
-                            this_thread::sleep_for(4s);
+                            this_thread::sleep_for(tiempoRandom * seconds(1));
                             cajero->comunicarOrden(pedido);
                         }
                     }
@@ -63,16 +69,23 @@ class threads
         void llegadaClientes() 
             {   
                 int* clientAmount = simulacion.getClientesPorLlegar();
-                int* tiempoEntreClientes = simulacion.getTiempoEntreClientes();
+                int* tiempoEntreClientesMin = simulacion.getTiempoEntreClientesMin();
+                int* tiempoEntreClientesMax = simulacion.getTiempoEntreClientesMax();
 
                 for (int i = 0; i < *clientAmount; i++)
                 {
+                    // Create a random number generator engine
+                    random_device rd;  // Seed the engine
+                    mt19937 mt(rd());  // Mersenne Twister pseudo-random number generator
+                    uniform_int_distribution<int> distribution(*tiempoEntreClientesMin, *tiempoEntreClientesMax);
+                    int tiempoRandom = distribution(mt);
+
                     cout << "\n" << endl;
                     Cliente *newCliente = new Cliente();
                     fila_exterior->enqueue(newCliente);
                     cout << "Llego el cliente numero: " << i+1<< endl;
                     
-                    this_thread::sleep_for(*tiempoEntreClientes * seconds(1));
+                    this_thread::sleep_for(tiempoRandom * seconds(1));
                 }
             }
 };
