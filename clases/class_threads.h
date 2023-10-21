@@ -5,6 +5,7 @@
 #include "class_simulacion.h"
 #include "class_randomgenerator.h"
 #include "class_cliente.h"
+#include "class_managerCajero.h"
 #include "class_cajero.h"
 #include "listas/queue.h"
 #include "listas/stack.h"
@@ -14,6 +15,8 @@
 #include <iostream>
 #include <thread>
 #include <chrono>
+#include <condition_variable>
+#include <mutex>
 
 using namespace std;
 using namespace std::this_thread;
@@ -24,21 +27,53 @@ class threads
 {
     private:
         Simulacion simulacion;
-        RandomGenerator randomGenerator;    
+        RandomGenerator randomGenerator;
+        ManagerCajero* managerCajero;
+        queue* fila_exterior;
+
     public:
+        threads(ManagerCajero* pManagerCajero, queue* pFilaExterior){
+            managerCajero = pManagerCajero;
+            fila_exterior = pFilaExterior;
+        }
+        void cargarClientes(){
+            this_thread::sleep_for(2s);
+            cout << "Entro a cargar clientes" << endl;
 
-        void llegadaClientes() 
-        {   
-            int* clientAmount = simulacion.getClientesPorLlegar();
-            int* tiempoEntreClientes = simulacion.getTiempoEntreClientes();
+            while (true) {
 
-            for (int i = 0; i < *clientAmount; i++)
-            {
-                Cliente *newCliente = new Cliente();
-                cout << "\nLlego un cliente" << endl;
-                fila_exterior.enqueue(newCliente);
-                this_thread::sleep_for(*tiempoEntreClientes * seconds(1));
+                if (!fila_exterior->isEmpty()) {
+                    this_thread::sleep_for(4s);
+                    for (Cajero* cajero : managerCajero->getCajeros()){
+
+                        if (cajero->getClienteActual() == nullptr && !fila_exterior->isEmpty()){
+                            Cliente* cliente = static_cast<Cliente*>(fila_exterior->dequeue());
+                            cajero->setClienteActual(cliente);
+                            cout << "\nEl cajero " << cajero->getName() << " está atendiendo al cliente " << cliente->getName() << endl;
+                            Pedido* pedido = cajero->apuntarOrden();
+                            this_thread::sleep_for(4s);
+                            cajero->comunicarOrden(pedido);
+                        }
+                    }
+                }
+                this_thread::sleep_for(50ms);
             }
         }
+
+        void llegadaClientes() 
+            {   
+                int* clientAmount = simulacion.getClientesPorLlegar();
+                int* tiempoEntreClientes = simulacion.getTiempoEntreClientes();
+
+                for (int i = 0; i < *clientAmount; i++)
+                {
+                    cout << "\n" << endl;
+                    Cliente *newCliente = new Cliente();
+                    fila_exterior->enqueue(newCliente);
+                    cout << "Llego el cliente numero: " << i+1<< endl;
+                    
+                    this_thread::sleep_for(*tiempoEntreClientes * seconds(1));
+                }
+            }
 };
 #endif

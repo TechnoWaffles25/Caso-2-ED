@@ -1,54 +1,40 @@
 #include "clases/class_threads.h"
+#include "clases/class_managerCajero.h"
 
 using namespace std;
 
-
-
-/*void operationCajero()
-{   
-    using namespace std::literals::chrono_literals;
-
-    vector<Cajero*> cajeros;
-    int* numCajeros = simulacion.getCajeros();
-
-    int* atencionCajeroMin = simulacion.getTiempoAtencionSegMin();
-    int* atencionCajerMax = simulacion.getTiempoAtencionSegMax();
-
-    for (int i = 0; i < *numCajeros; i++)
-    {
-        string cajeroName = "Cajero " + to_string(i + 1);
-        Cajero* newCajero = new Cajero(cajeroName);
-        cajeros.push_back(newCajero);
-        cout << "\nSe ha creado un cajero llamado " << newCajero->getName() << endl;
-    }
-
-    while (!fila_exterior.isEmpty()) {
-    for (int i = 0; i < *numCajeros && !fila_exterior.isEmpty(); i++) {
-        cout << "\nCajero " << i << " está sirviendo." << endl;
-        void* ptr = fila_exterior.dequeue();
-        Cliente* cliente = static_cast<Cliente*>(ptr);
-        cajeros[i]->setClienteActual(cliente);
-        cajeros[i]->atenderCliente();
-        int serveTime = 5;
-        this_thread::sleep_for(serveTime * std::chrono::seconds(1));
-        Pedido* pedido = cajeros[i]->apuntarOrden();
-        cajeros[i]->comunicarOrden(pedido);
-    }
-}
-cout << "Todos los clientes fueron servidos" << endl;
-}*/
-
-
 int main(void)
 {
-    // Create a thread for the llegadaClientes() function
+    Simulacion sim;
+
+    // Managers
+    ManagerCajero *managerCajero = new ManagerCajero();
     
 
-    // Create a thread for the operationCajero() function
-    //thread cajeroThread(operationCajero);
+    queue *fila_exterior = new queue(); // Cola donde llegan primeramente los clientes, pueden entrar al restaurante o salir si esta muy lento
+    queue *pedidosPendientes = new queue(); // Cola donde se van los pedidos apuntados por los cajeros
+    queue *pedidosListos = new queue(); // Cola donde van los pedidos terminados por los cocineros y seran recogidos por los meseros
 
-    threads thread;
+    threads thread(managerCajero, fila_exterior);
+    cout << "---------------------------------------------------------" << endl;
+
+    // Add Cajero objects to the CajeroManager
+    for (int i = 0; i < *sim.getCajeros(); i++) {
+        Cajero* pCajero = new Cajero("Cajero" + to_string(i), pedidosPendientes);
+        managerCajero->addCajero(pCajero);
+        vector<Cajero*> kk = managerCajero->getCajeros();
+        cout << "\nSe ha creado un cajero llamado " << pCajero->getName() << endl;
+
+    }
+    for (Cajero* cajero : managerCajero->getCajeros()){
+        cout << "Existe cajero: " << cajero->getName() << endl;
+    }
+
+    cout << "---------------------------------------------------------" << endl;
     // Wait for both threads to finish
-    thread.llegadaClientes();
-    //cajeroThread.join();
+    std::thread llegadaClientesThread(&threads::llegadaClientes, &thread);
+    std::thread threadCargarClientesThread(&threads::cargarClientes, &thread);
+
+    llegadaClientesThread.detach();
+    threadCargarClientesThread.join();
 }

@@ -60,7 +60,8 @@
         "string_view": "cpp",
         "iomanip": "cpp",
         "mutex": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "__threading_support": "cpp"
     },
     "cmake.sourceDirectory": "/Users/amontero/Wizard stuff/C++/Caso-2-ED/clases/json-develop/tests/cmake_fetch_content2"
 }

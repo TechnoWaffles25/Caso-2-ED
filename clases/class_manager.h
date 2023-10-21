@@ -4,20 +4,6 @@
 #include "class_cajero.h"
 #include "class_chef.h"
 #include <vector>
-
-class CajeroManager {
-    private:
-        vector<Cajero*> cajeros;
-
-    public:
-        void addCajero(Cajero* pCajero){
-            cajeros.push_back(pCajero);
-        }
-        vector<Cajero*> getCajeros() const{
-            return cajeros;
-        }
-};
-
 class ChefManager {
     private:
         vector<Chef*> chefs;

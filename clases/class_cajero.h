@@ -14,12 +14,15 @@ class Cajero
     private:
         string name; /* Nombre sacado de la lista json */
         RandomGenerator randomGenerator;
-        stack clienteCajero; // Stack para almacenar el cliente que esta siendo atendido
         Cliente* clienteActual; // Puntero al cliente que se esta atendiendo en este momento
+        queue* fila_exterior; // Cola donde llegan primeramente los clientes, pueden entrar al restaurante o salir si esta muy lento    
+        queue* pedidosPendientes; // Cola donde se van los pedidos apuntados por los cajeros
+
     public:
         static int contadorPedidos; // Static variable para contar el numero de ordenes entre todos los clientes    
-        Cajero(string name){
+        Cajero(string name, queue* pPedidosPendientes){
             setName(name);
+            pedidosPendientes = pPedidosPendientes;
             clienteActual = nullptr;
         }
 
@@ -45,19 +48,19 @@ class Cajero
             return pedido;
         }
 
-        void atenderCliente(){
-            while (!fila_exterior.isEmpty()) {
+        /*void atenderCliente(){
+            while (!fila_exterior->isEmpty()) {
             clienteActual = (Cliente*)fila_exterior.dequeue();
             clienteCajero.push(clienteActual);
             cout << "\nEl cajero " << name << " está atendiendo al cliente " << clienteActual->getName() << endl;
             Pedido* pedido = apuntarOrden();
             comunicarOrden(pedido);
-    }
-        }
+    }      
+        }*/
         void comunicarOrden(Pedido* pedido){
-            pedidosPendientes.enqueue(&pedido);
-            clienteCajero.pop();
+            pedidosPendientes->enqueue(&pedido);
             cout << "\nEl cajero " << name << " le ha comunicado al chef que el cliente " << clienteActual->getName() << " ha pedido " << &pedido->item << endl;
+            clienteActual = nullptr;
         }
 };
 int Cajero::contadorPedidos = 1;
