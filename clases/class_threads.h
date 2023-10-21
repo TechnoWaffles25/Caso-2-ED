@@ -7,6 +7,7 @@
 #include "class_cliente.h"
 #include "class_managerCajero.h"
 #include "class_cajero.h"
+#include "class_managerChefs.h"
 #include "listas/queue.h"
 #include "listas/stack.h"
 #include <random>
@@ -29,12 +30,21 @@ class threads
         Simulacion simulacion;
         RandomGenerator randomGenerator;
         ManagerCajero* managerCajero;
+        ManagerChef* managerChef;
         queue* fila_exterior;
+        queue* pedidosPendientes;
+        queue* pedidosListos;
 
     public:
-        threads(ManagerCajero* pManagerCajero, queue* pFilaExterior){
+        threads(ManagerCajero* pManagerCajero, ManagerChef* pManagerChef, queue* pFilaExterior, 
+                queue* pPedidosPendientes, queue* pPedidosListos, stack* pPlatosLimpios){
             managerCajero = pManagerCajero;
+            managerChef = pManagerChef;
+
             fila_exterior = pFilaExterior;
+            pedidosPendientes = pPedidosPendientes;
+            pedidosListos = pPedidosListos;
+            
         }
 
         void cargarClientes(){
@@ -49,10 +59,12 @@ class threads
                     random_device rd;  // Seed the engine
                     mt19937 mt(rd());  // Mersenne Twister pseudo-random number generator
                     uniform_int_distribution<int> distribution(*tiemopAtencionMin,*tiemopAtencionMax);
+
                     int tiempoRandom = distribution(mt);
                     for (Cajero* cajero : managerCajero->getCajeros()){
-
+                            cout << "Print test" << endl;
                         if (cajero->getClienteActual() == nullptr && !fila_exterior->isEmpty()){
+                            cout << "Print test" << endl;
                             Cliente* cliente = static_cast<Cliente*>(fila_exterior->dequeue());
                             cajero->setClienteActual(cliente);
                             cout << "\nEl cajero " << cajero->getName() << " está atendiendo al cliente " << cliente->getName() << endl;
@@ -88,5 +100,36 @@ class threads
                     this_thread::sleep_for(tiempoRandom * seconds(1));
                 }
             }
+
+        void cocinarPedidos(){
+            this_thread::sleep_for(2s);
+            int* tiempoCocinarMin = simulacion.getTiempoCocinaMin();
+            int* tiempoCocinarMax = simulacion.getTiempoCocinaMax();
+            while (true) {
+                if (!pedidosPendientes->isEmpty()) {
+                    this_thread::sleep_for(2s);
+                    // Create a random number generator engine
+                    random_device rd;  // Seed the engine
+                    mt19937 mt(rd());  // Mersenne Twister pseudo-random number generator
+                    uniform_int_distribution<int> distribution(*tiempoCocinarMin,*tiempoCocinarMax);
+                    int tiempoRandom = distribution(mt);
+
+                    for (Chef* chef : managerChef->getChef()){
+
+                        if (chef->getPedido() == nullptr && !pedidosPendientes->isEmpty()){
+                            chef->setPedido();
+                            this_thread::sleep_for(2 * seconds(1));
+                            cout << "\nEl chef " << chef->getName() << " recibio el pedido " << chef->getPedido()->num_orden << endl;
+                            chef->setPlato();
+                            this_thread::sleep_for(1 * seconds(1));
+                            chef->cocinarPedido();
+                            this_thread::sleep_for(tiempoRandom * seconds(1));
+                            chef->alistarPedido();
+                        }
+                    }
+                }
+                this_thread::sleep_for(50ms);
+            }
+        }
 };
 #endif

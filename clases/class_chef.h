@@ -8,31 +8,59 @@
 #include "listas/queue.h"
 #include <string>
 
+using namespace std;
 class Chef
 {
     private:
-        std::string name; /* Nombre sacado de la lista json */
-        Pedido orden; /* Orden dada por un mesero, es un struct*/
-        Plato plato; /* Aca se sabe si el cocinero tiene o no un plato ya agarrado */
+        string name; /* Nombre sacado de la lista json */
+        Pedido* pedido; /* Orden dada por un mesero, es un struct*/
+        Plato* plato; /* Aca se sabe si el cocinero tiene o no un plato ya agarrado */
+        
+        queue* pedidosPendientes; // Cola donde se van los pedidos apuntados por los cajeros
+        queue* pedidosListos; // Cola donde van los pedidos terminados por los cocineros y seran recogidos por los meseros
+        stack* platosLavados; // Accede a los platos que estan lavados
     public:
-        Chef(){
-            // Constructor
+        Chef(string name, queue* pPedidosPendientes, queue* pPedidosListos, stack* pPlatosLavados){
+            setName(name);
+            pedidosPendientes = pPedidosPendientes;
+            platosLavados = pPlatosLavados;
         }
-        void getChef(){
-            // Accesa el nombre del chef y la orden que esta cocinando
+        void setName(string pName){
+            name = pName;
         }
-        Plato agarrarPlato(stack platosLavados){
-            // Agarra un plato de la pila de platos
+        string getName(){
+            return name;
         }
-        void quitarPlato(Plato plato){
-            // Le quita el plato al preparar la comida
+        Pedido* getPedido(){
+            return pedido;
         }
-        Pedido cocinarPedido(Pedido pedido, Plato plato){
-            // Si tiene un plato y una orden alista un pedido en un rango de tiempo
+        void setPedido(){
+            pedido = static_cast<Pedido*>(pedidosPendientes->dequeue());
+            cout << "El chef agarro el pedido " << endl;
         }
-        Pedido alistarPedido(Pedido pedido, queue pedidosListos){
-            /* Al terminar el pedido lo alista para ser llevado por un mesero a una mesa, transforma
-            la condicion bool listo del struct pedido a true para que se comido por el cliente*/
+        void setPlato(){
+            plato = static_cast<Plato*>(platosLavados->pop());
+            cout << "El chef agarro el plato " << endl;
+        }
+        Plato* getPlato(){
+            return plato;
+        }
+        void quitarPlato(Plato pPlato){
+            plato = nullptr;
+        }
+        void cocinarPedido(){
+            // Cambiamos el estado del plato a sucio y la comida ahora esta cocinada
+            cout << "El chef esta cocinando el pedido " << endl;
+            pedido->listo = true;
+        }
+        void alistarPedido(){
+            cout << "El chef esta alistando el pedido " << endl;
+            plato->cambiarLimpio();
+            pedido->plato = plato;
+            pedidosListos->enqueue(pedido);
+            cout << "El pedido " << pedido->num_orden << " esta listo" << endl;
+            pedido = nullptr;
+            plato = nullptr;
         }
 };
 #endif // CLASS_CHEF_H
