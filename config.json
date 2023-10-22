@@ -2,7 +2,7 @@
     "minutos simulacion":10,
     "segundos por minuto":5,
 
-    "clientes por llegar":10,
+    "clientes por llegar":5,
     "tiempo entre clientes min": 5,
     "tiempo entre clientes max": 10,
     "capacidad restaurante": 20,
@@ -15,7 +15,7 @@
 
     "tiempo en caja":{"minimo":4,"maximo":8},
     "tiempo lavaplatos":{"minimo":3,"maximo":5},
-    "tiempo cocina":{"minimo":8,"maximo":20},
+    "tiempo cocina":{"minimo":6,"maximo":12},
     "tiempo monchona":{"minimo":6,"maximo":10},
 
     "nombres": [

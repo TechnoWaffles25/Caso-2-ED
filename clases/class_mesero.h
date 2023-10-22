@@ -3,39 +3,50 @@
 #include "class_chef.h"
 #include "class_plato.h"
 #include "listas/queue.h"
+#include "listas/lista.h"
+#include "listas/stack.h"
 #include <string>
-#include <queue>
 
+using namespace std;
 
 class Mesero {
 private:
-    std::string name; // Nombre del mesero
-    Pedido orden;     // Item deseado por el cliente, más el número de orden dado en la caja
-
+    string name; // Nombre del mesero
+    Pedido* pedido;   // Item deseado por el cliente, más el número de orden dado en la caja
+    queue* pedidosListos; // Cola donde van los pedidos terminados por los cocineros y serán recogidos por los meseros
+    stack* platosSucios;
+    vector<Cliente*>  restaurante; 
+    vector<Plato*> platosSuciosRestaurante;
 public:
-    Mesero(const std::string& pName) : name(pName) {
-        // Constructor
+    Mesero(string pName, queue* pPedidosListos, vector<Cliente*>  pRestaurante, vector<Plato*> pPlatosSuciosRestaurante, stack* pPlatosSucios){
+        name = pName;
+        pedidosListos = pPedidosListos;
+        restaurante = pRestaurante;
+        platosSuciosRestaurante = pPlatosSuciosRestaurante;
     }
 
-    void getMesero() {
-        // Accede al nombre del mesero y su número de orden actual si tiene
+    string getName(){
+        return name;
     }
-
-    void servirOrden(Cliente* cliente, queue<Pedido>& ordenesListas) {
+    void servirOrden() {
         // Recoge la orden preparada por el chef y la lleva a la mesa
-        if (cliente && !ordenesListas.isEmpty()) {
-            Pedido* pedido = ordenesListas.dequeue();
-            // Realiza la lógica para servir la orden al cliente
+        pedido = static_cast<Pedido*>(pedidosListos->dequeue());
+        cout << "El mesero " << name << " agarro el pedido " << pedido << endl;
+        for (int i = 0; i < restaurante.size(); i++) {
+            Cliente* cliente = restaurante.at(i);
+            if (*cliente->getNumeroOrdenPtr() == *pedido->num_orden) {
+                cliente->setPedido(pedido);
+                cout << "El mesero " << name << " le ha servido el pedido " << pedido << " al cliente " << cliente->getName() << endl;
+                break;
+            }
         }
     }
 
-    // Otras funciones y métodos, si es necesario
-
-    void limpiarMesa(stack<Plato>& platosSucios) {
+    void limpiarMesa() {
         // Limpia la mesa y lleva el plato sucio dejado por la persona a la pila de platos sucios
-        if (!platosSucios.isEmpty()) {
-            Plato plato = platosSucios.pop();
-            // Realiza la lógica para limpiar la mesa y manejar platos sucios
-        }
+        for (Plato* plato : platosSuciosRestaurante) {
+                platosSucios->push(plato);
+                cout << "El mesero " << name << " recogio el plato sucio" << endl;
+                }
     }
 };

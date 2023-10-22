@@ -4,21 +4,28 @@
 #include <string>
 #include <sstream>
 #include "class_randomgenerator.h"
+#include "class_plato.h"
+#include "struct_pedido.h"
 using namespace std;
 class Cliente
 {
     private:
         string name; /* Nombre sacado de la lista json */
         string item; /* obtenido por la funcion decidirPedido */ // PRIMERAMENTE ES NULL
-        int numeroOrden; /* Se settea con la funcion setNumeroOrden y es unico para cada cliente*/
+        int* numeroOrden; /* Se settea con la funcion setNumeroOrden y es unico para cada cliente*/
+        Pedido* pedido; /* Orden dada por un mesero, es un struct*/
         RandomGenerator randomGenerator; // Para generar su pedido y nombre random
+        vector<Plato*> platosSuciosRestaurante; // Lista de platos que ha comido el cliente
+
     public:
         static int contadorNumOrden; // Static variable para contar el numero de ordenes entre todos los clientes
         // Constrcutor
-        Cliente(){
+        Cliente(vector<Plato*> pPlatosSuciosRestaurante){
             setName();
             setItem();
             setNumeroOrden();
+            pedido = nullptr;
+            platosSuciosRestaurante = pPlatosSuciosRestaurante;
         }
 
         // Setters
@@ -29,8 +36,11 @@ class Cliente
             item = randomGenerator.getRandomFood();
         }
         void setNumeroOrden(){
-            numeroOrden = contadorNumOrden;
+            numeroOrden = new int(contadorNumOrden);
             contadorNumOrden++;
+        }
+        void setPedido(Pedido* pPedido){
+            pedido = pPedido;
         }
 
         // Getters
@@ -40,18 +50,23 @@ class Cliente
         string getItem(){
             return item;
         }
-        int getNumeroOrden(){
+        int* getNumeroOrdenPtr(){
             return numeroOrden;
         }
-
-        // Funciones del simulador
-        void moverCliente(){
-            /* Dependiendo de donde este el cliente (cola, caja, restaurante) se mueve al la
-            siguiente estacion (cola->caja, caja->restaurante, restaurante->afuera) */
+        int getNumeroOrden(){
+            return *numeroOrden;
         }
+        Pedido* getPedido(){
+            return pedido;
+        }
+
         void comerMoncha(){
-            /* El cliente come su comida en un rango de tiempo, generando un plato sucio 
-            y eliminando el struct pedido*/
+            Plato platosucio = *(pedido->plato);
+            platosSuciosRestaurante.push_back(&platosucio);
+            cout << "Se dejo el plato sucio en la mesa" << endl;
+            cout << "El cliente " << name << " comio y se fue del restaurante" << endl;
+            delete pedido;
+            delete this;
         }
 
         string toString() {
