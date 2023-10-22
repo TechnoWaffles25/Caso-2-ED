@@ -30,6 +30,7 @@ public:
     }
     void servirOrden() {
         // Recoge la orden preparada por el chef y la lleva a la mesa
+        cout << "El mesero " << name << " esta recogiendo un pedido" << endl;
         pedido = static_cast<Pedido*>(pedidosListos->dequeue());
         cout << "El mesero " << name << " agarro el pedido " << pedido << endl;
         for (int i = 0; i < restaurante.size(); i++) {

@@ -58,7 +58,6 @@
                 cout << "\nEl cajero " << name << " le ha comunicado al chef que el cliente " << clienteActual->getName() << " ha pedido " << &pedido->item << endl;
                 restaurante.push_back(clienteActual);
                 cout << "\nClientes en el restaurante: " << restaurante.size() << endl;
-                clienteActual = nullptr;
             }
     };
     int Cajero::contadorPedidos = 1;

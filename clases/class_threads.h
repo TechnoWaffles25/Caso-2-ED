@@ -133,7 +133,9 @@ class threads
                             this_thread::sleep_for(1 * seconds(1));
                             chef->cocinarPedido();
                             this_thread::sleep_for(tiempoRandom * seconds(1));
+                            cout << "El chef esta alistando el pedido " << endl;
                             chef->alistarPedido();
+                            this_thread::sleep_for(2 * seconds(1));
                         }
                     }
                 }
@@ -144,12 +146,11 @@ class threads
         void servirPedido(){
             this_thread::sleep_for(2s);
             while (true) {
-                if (!pedidosListos->isEmpty()) {
-                    this_thread::sleep_for(2s);
+                if (pedidosListos->isEmpty()==false) {
                     for (Mesero* mesero : managerMesero->getMesero()){
                         if (!pedidosListos->isEmpty()){
                             mesero->servirOrden();
-                            this_thread::sleep_for(seconds(3));
+                            this_thread::sleep_for(3s);
                         }
                     }
                 }
