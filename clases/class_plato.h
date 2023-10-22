@@ -6,19 +6,23 @@ using namespace std;
 
 class Plato
 {
-    private:
-        bool limpio; /* True o False */
-        string Name;
-    public:
-        Plato(string pName){
-            limpio = true;
-            Name = pName;
-        }
-        bool getPlato(){
-            return limpio;
-        }
-        void cambiarLimpio(){
-            limpio = !limpio;
-        }
+private:
+    bool limpio; /* True o False */
+    string name;
+
+public:
+    Plato(string pName) : limpio(true), name(pName) {}
+
+    bool getPlato() {
+        return limpio;
+    }
+
+    void cambiarLimpio() {
+        limpio = !limpio;
+    }
+
+    string getName() {
+        return name;
+    }
 };
 #endif // CLASS_PLATO_H
