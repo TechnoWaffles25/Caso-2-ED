@@ -122,19 +122,23 @@ class threads
 
                     uniform_int_distribution<int> distribution(*tiempoCocinarMin,*tiempoCocinarMax);
                     int tiempoRandom = distribution(mt);
-
+                    cout << "Print test 1" << endl;
                     for (Chef* chef : managerChef->getChef()){
-
+                        cout << "Print test 2" << endl;
                         if (chef->getPedido() == nullptr && !pedidosPendientes->isEmpty()){
+                            cout << "Print test 3" << endl;
                             chef->setPedido();
                             this_thread::sleep_for(2 * seconds(1));
                             cout << "\nEl chef " << chef->getName() << " recibio el pedido " << chef->getPedido()->num_orden << endl;
                             chef->setPlato();
+                            cout << "Print test 4" << endl;
                             this_thread::sleep_for(1 * seconds(1));
                             chef->cocinarPedido();
+                            cout << "Print test 5" << endl;
                             this_thread::sleep_for(tiempoRandom * seconds(1));
                             cout << "El chef esta alistando el pedido " << endl;
                             chef->alistarPedido();
+                            cout << "Print test 6" << endl;
                             this_thread::sleep_for(2 * seconds(1));
                         }
                     }
