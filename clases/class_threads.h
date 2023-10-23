@@ -72,14 +72,15 @@ class threads
 
                     int tiempoRandom = distribution(mt);
                     for (Cajero* cajero : managerCajero->getCajeros()){
-                            cout << "Print test" << endl;
                         if (cajero->getClienteActual() == nullptr && !fila_exterior->isEmpty()){
-                            cout << "Print test" << endl;
                             Cliente* cliente = static_cast<Cliente*>(fila_exterior->dequeue());
                             cajero->setClienteActual(cliente);
-                            cout << "\nEl cajero " << cajero->getName() << " está atendiendo al cliente " << cliente->getName() << endl;
+                            cout << "\nTHRD - El cajero " << cajero->getName() << " está atendiendo al cliente " << cliente->getName() << endl;
                             Pedido* pedido = cajero->apuntarOrden();
                             this_thread::sleep_for(tiempoRandom * seconds(1));
+                            restaurante.push_back(cliente);
+                            cout << "Pushback" << endl;
+                            cout << "\nTHRD - Clients in the restaurant: " << restaurante.size() << endl;
                             cajero->comunicarOrden(pedido);
                         }
                     }
@@ -101,11 +102,9 @@ class threads
                     uniform_int_distribution<int> distribution(*tiempoEntreClientesMin, *tiempoEntreClientesMax);
                     int tiempoRandom = distribution(mt);
 
-                    cout << "\n" << endl;
                     Cliente *newCliente = new Cliente(platosSuciosRestaurante);
                     fila_exterior->enqueue(newCliente);
-                    cout << "Llego el cliente numero: " << i+1<< endl;
-                    
+                    cout << "\nTHRD - Llego el cliente numero: " << i+1<< endl;
                     this_thread::sleep_for(tiempoRandom * seconds(1));
                 }
             }
@@ -123,23 +122,17 @@ class threads
 
                     uniform_int_distribution<int> distribution(*tiempoCocinarMin,*tiempoCocinarMax);
                     int tiempoRandom = distribution(mt);
-                    cout << "Print test 1" << endl;
                     for (Chef* chef : managerChef->getChef()){
-                        cout << "Print test 2" << endl;
                         if (chef->getPedido() == nullptr && !pedidosPendientes->isEmpty()){
-                            cout << "Print test 3" << endl;
                             chef->setPedido();
                             this_thread::sleep_for(2 * seconds(1));
-                            cout << "\nEl chef " << chef->getName() << " recibio el pedido " << chef->getPedido()->num_orden << endl;
+                            cout << "\nTHRD - El chef " << chef->getName() << " recibio el pedido " << chef->getPedido()->num_orden << endl;
                             chef->setPlato();
-                            cout << "Print test 4" << endl;
                             this_thread::sleep_for(1 * seconds(1));
                             chef->cocinarPedido();
-                            cout << "Print test 5" << endl;
                             this_thread::sleep_for(tiempoRandom * seconds(1));
-                            cout << "El chef esta alistando el pedido " << endl;
+                            cout << "\nTHRD - El chef esta alistando el pedido " << endl;
                             chef->alistarPedido();
-                            cout << "Print test 6" << endl;
                             this_thread::sleep_for(2 * seconds(1));
                         }
                     }
@@ -149,17 +142,28 @@ class threads
         }
 
         void servirPedido(){
-            this_thread::sleep_for(2s);
+            this_thread::sleep_for(8s);
             while (true) {
                 if (pedidosListos->isEmpty()==false) {
                     for (Mesero* mesero : managerMesero->getMesero()){
                         if (!pedidosListos->isEmpty()){
-                            mesero->servirOrden();
-                            this_thread::sleep_for(3s);
+                            cout << "MESERO - El mesero "<< mesero->getName() << " esta recogiendo un pedido" << endl;
+                            Pedido* pedido = static_cast<Pedido*>(pedidosListos->dequeue());
+                            cout << "MESERO - El mesero " << mesero->getName()<< " agarro el pedido " << *pedido->num_orden << endl;
+                            cout << "RESTAURANTE SIZE " << restaurante.size() << endl;
+                            for (int i = 0; i < restaurante.size(); i++) {
+                                Cliente* cliente = restaurante.at(i);
+                                if (*cliente->getNumeroOrdenPtr() == *pedido->num_orden) {
+                                    cliente->setPedido(pedido);
+                                    cout << "MESERO - El mesero " << mesero->getName() << " le ha servido el pedido " << pedido << " al cliente " << cliente->getName() << endl;
+                                    this_thread::sleep_for(3s);
+                                    break;
+                                }
+                            }
                         }
                     }
                 }
-                this_thread::sleep_for(1s);
+                this_thread::sleep_for(2s);
             }
         }
 
@@ -173,16 +177,21 @@ class threads
             while (true) {
                 if (!restaurante.empty()) {
                     this_thread::sleep_for(2s);
-                    for (Cliente* cliente : restaurante){
+                    for (int i = 0; i < restaurante.size(); i++) {
+                        Cliente* cliente = restaurante[i];
+                        cout << "PRUEBA" << endl;
                         if (cliente->getPedido() != nullptr && *(cliente->getPedido()->listo) == true){
+                            cout << "PRUEBA 2" << endl;
                             uniform_int_distribution<int> distribution(*tiempoComerMin,*tiempoComerMax);
                             int tiempoRandom = distribution(mt);
                             cliente->comerMoncha();
+                            restaurante.erase(restaurante.begin() + i); // Remove the element at index i
                             this_thread::sleep_for(tiempoRandom * seconds(3));
+                            i--; // Decrement the index to account for the removed element
                         }
                     }
                 }
-                this_thread::sleep_for(1ms);
+                this_thread::sleep_for(1s);
             }
         }
 };

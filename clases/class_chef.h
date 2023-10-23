@@ -38,11 +38,11 @@ class Chef
         }
         void setPedido(){
             pedido = static_cast<Pedido*>(pedidosPendientes->dequeue());
-            cout << "El chef agarro el pedido " << pedido << endl;
+            cout << "\nCHEF - El chef agarro el pedido " << pedido << endl;
         }
         void setPlato(){
             plato = static_cast<Plato*>(platosLavados->pop());
-            cout << "El chef agarro el plato " << endl;
+            cout << "\nCHEF - El chef agarro el plato " << endl;
         }
         Plato* getPlato(){
             return plato;
@@ -52,14 +52,14 @@ class Chef
         }
         void cocinarPedido(){
             // Cambiamos el estado del plato a sucio y la comida ahora esta cocinada
-            cout << "El chef esta cocinando el pedido " << endl;
+            cout << "\nCHEF - El chef" << getName() << "esta cocinando el pedido" << endl;
             plato->cambiarLimpio();
             pedido->listo = new bool(true);
         }
         void alistarPedido(){
             pedido->plato = plato;
             pedidosListos->enqueue(pedido);
-            cout << "El pedido esta listo" << endl;
+            cout << "\nCHEF - El pedido esta listo" << endl;
             pedido = nullptr;
             plato = nullptr;
         }

@@ -23,7 +23,7 @@
         public:
             static int contadorPedidos; // Static variable para contar el numero de ordenes entre todos los clientes    
             
-            Cajero(string name, queue* pPedidosPendientes, vector<Cliente*>  pRestaurante){
+            Cajero(string name, queue* pPedidosPendientes, vector<Cliente*>& pRestaurante){
                 setName(name);
                 pedidosPendientes = pPedidosPendientes;
                 restaurante = pRestaurante;
@@ -52,13 +52,12 @@
                 return pedido;
             }
 
-            void comunicarOrden(Pedido* pedido){
+            void comunicarOrden(Pedido* pedido) {
                 pedidosPendientes->enqueue(pedido);
-                cout << "\nCantidad de pedidos pendientes: " << pedidosPendientes << endl;
-                cout << "\nEl cajero " << name << " le ha comunicado al chef que el cliente " << clienteActual->getName() << " ha pedido " << &pedido->item << endl;
-                restaurante.push_back(clienteActual);
-                cout << "\nClientes en el restaurante: " << restaurante.size() << endl;
+                cout << "\nCAJERO - El cajero " << name << " le ha comunicado al chef that the cliente " << clienteActual->getName() << " has ordered " << *(pedido->item) << endl;
+                clienteActual = nullptr;
             }
+
     };
     int Cajero::contadorPedidos = 1;
     #endif // CAJERO_H

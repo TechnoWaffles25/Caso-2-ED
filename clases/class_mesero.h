@@ -30,14 +30,16 @@ public:
     }
     void servirOrden() {
         // Recoge la orden preparada por el chef y la lleva a la mesa
-        cout << "El mesero " << name << " esta recogiendo un pedido" << endl;
+        cout << "MESERO - El mesero " << name << " esta recogiendo un pedido" << endl;
         pedido = static_cast<Pedido*>(pedidosListos->dequeue());
-        cout << "El mesero " << name << " agarro el pedido " << pedido << endl;
+        cout << "MESERO - El mesero " << name << " agarro el pedido " << *pedido->num_orden << endl;
+        cout << "RESTAURANTE SIZE " << restaurante.size() << endl;
         for (int i = 0; i < restaurante.size(); i++) {
             Cliente* cliente = restaurante.at(i);
+            cout << "NUMERO ORDEN CLIENTE: " << *cliente->getNumeroOrdenPtr() << endl;
             if (*cliente->getNumeroOrdenPtr() == *pedido->num_orden) {
                 cliente->setPedido(pedido);
-                cout << "El mesero " << name << " le ha servido el pedido " << pedido << " al cliente " << cliente->getName() << endl;
+                cout << "MESERO - El mesero " << name << " le ha servido el pedido " << pedido << " al cliente " << cliente->getName() << endl;
                 break;
             }
         }
@@ -47,7 +49,7 @@ public:
         // Limpia la mesa y lleva el plato sucio dejado por la persona a la pila de platos sucios
         for (Plato* plato : platosSuciosRestaurante) {
                 platosSucios->push(plato);
-                cout << "El mesero " << name << " recogio el plato sucio" << endl;
+                cout << "MESERO - El mesero " << name << " recogio el plato sucio" << endl;
                 }
     }
 };

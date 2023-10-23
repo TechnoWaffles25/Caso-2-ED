@@ -20,6 +20,7 @@ int main(void)
 
     vector<Cliente*> restaurante; // Lista doblemente enlazada donde se encuentran los clientes que estan en el restaurante
     vector<Plato*> platosSuciosRestaurante; // Lista doblemente enlazada donde se encuentran los platos que estan en el restaurante
+    
     threads thread(managerCajero, managerChef, managerMesero, fila_exterior, pedidosPendientes, 
                     pedidosListos, platosLimpios, restaurante, platosSuciosRestaurante);
 
@@ -61,10 +62,12 @@ int main(void)
     std::thread threadCargarClientesThread(&threads::cargarClientes, &thread);
     std::thread threadCocinar(&threads::cocinarPedidos, &thread);
     std::thread threadServir(&threads::servirPedido, &thread);
+    std::thread threadComer(&threads::clienteComer, &thread);
 
     llegadaClientesThread.detach();
     threadCargarClientesThread.detach();
     threadCocinar.detach();
-    threadServir.join();
-    
+    threadServir.detach();
+    threadComer.join();
+    cout<< "\nFIN DEL SIMULADOR" << endl;
 }

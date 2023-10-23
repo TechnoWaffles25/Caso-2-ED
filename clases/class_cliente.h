@@ -61,12 +61,10 @@ class Cliente
         }
 
         void comerMoncha(){
-            Plato platosucio = *(pedido->plato);
-            platosSuciosRestaurante.push_back(&platosucio);
-            cout << "Se dejo el plato sucio en la mesa" << endl;
-            cout << "El cliente " << name << " comio y se fue del restaurante" << endl;
-            delete pedido;
-            delete this;
+            Plato* platosucio = pedido->plato;
+            platosSuciosRestaurante.push_back(platosucio);
+            cout << "CLIENTE - Se dejo el plato sucio en la mesa" << endl;
+            cout << "CLIENTE - El cliente " << name << " comio y se fue del restaurante" << endl;
         }
 
         string toString() {
