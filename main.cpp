@@ -67,5 +67,4 @@ int main(void)
     threadCocinar.join();
     //threadServir.join();
     
-
 }
