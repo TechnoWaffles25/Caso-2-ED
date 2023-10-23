@@ -60,11 +60,11 @@ int main(void)
     std::thread llegadaClientesThread(&threads::llegadaClientes, &thread);
     std::thread threadCargarClientesThread(&threads::cargarClientes, &thread);
     std::thread threadCocinar(&threads::cocinarPedidos, &thread);
-    //std::thread threadServir(&threads::servirPedido, &thread);
+    std::thread threadServir(&threads::servirPedido, &thread);
 
     llegadaClientesThread.detach();
-    threadCargarClientesThread.join();
-    threadCocinar.join();
-    //threadServir.join();
+    threadCargarClientesThread.detach();
+    threadCocinar.detach();
+    threadServir.join();
     
 }

@@ -49,6 +49,7 @@ class threads
                 vector<Cliente*>  pRestaurante, vector<Plato*> pPlatosSuciosRestaurante){
             managerCajero = pManagerCajero;
             managerChef = pManagerChef;
+            managerMesero = pManagerMesero;
 
             fila_exterior = pFilaExterior;
             restaurante = pRestaurante;

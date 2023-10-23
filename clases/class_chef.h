@@ -14,7 +14,7 @@ class Chef
     private:
         string name; /* Nombre sacado de la lista json */
         Pedido* pedido; /* Orden dada por un mesero, es un struct*/
-        Plato* plato; /* Aca se sabe si el cocinero tiene o no un plato ya agarrado */
+        Plato* plato = nullptr; /* Aca se sabe si el cocinero tiene o no un plato ya agarrado */
         
         queue* pedidosPendientes; // Cola donde se van los pedidos apuntados por los cajeros
         queue* pedidosListos; // Cola donde van los pedidos terminados por los cocineros y seran recogidos por los meseros
