@@ -52,14 +52,14 @@ class Chef
         }
         void cocinarPedido(){
             // Cambiamos el estado del plato a sucio y la comida ahora esta cocinada
-            cout << "\nCHEF - El chef" << getName() << "esta cocinando el pedido" << endl;
+            cout << "\nEl chef" << getName() << "esta cocinando el pedido" << endl;
             plato->cambiarLimpio();
             pedido->listo = new bool(true);
         }
         void alistarPedido(){
             pedido->plato = plato;
             pedidosListos->enqueue(pedido);
-            cout << "\nCHEF - El pedido esta listo" << endl;
+            cout << "\nEl pedido esta listo" << endl;
             pedido = nullptr;
             plato = nullptr;
         }

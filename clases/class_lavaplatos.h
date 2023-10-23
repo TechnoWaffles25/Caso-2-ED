@@ -3,44 +3,53 @@
 #include "class_plato.h"
 #include <iostream>
 
-class Lavaplatos
-{
+using namespace std;
+
+class Lavaplatos {
 private:
-    std::string name; /* Nombre sacado de la lista json */
-    stack platosSucios;
-    stack platosLimpios;
+    string name; // Nombre del lavaplatos
+    stack* platosSucios;
+    stack* platosLimpios;
 
 public:
-    Lavaplatos(std::string pName) : name(pName) {}
+    Lavaplatos(string name, stack* pPlatosSucios, stack* pPlatosLimpios){
+        setName(name);
+        platosSucios = pPlatosSucios;
+        platosLimpios = pPlatosLimpios;
+    }
 
-    std::string getName() {
+    string getName() {
         return name;
+    }
+    void setName(string pName){
+        name = pName;
     }
 
     // Agarra un plato de la pila de platos sucios, lo limpia y coloca el plato en la pila de platos limpios
     void limpiarPlato() {
-        if (!platosSucios.isEmpty()) {
-            Plato* platoSucio = static_cast<Plato*>(platosSucios.pop());
+        if (!platosSucios->isEmpty()) {
+            void* platoVoid = platosSucios->pop();
+            Plato* platoSucio = static_cast<Plato*>(platoVoid);
             // Simular el proceso de lavado
-            std::cout << "El lavaplatos " << name << " está lavando el plato " << platoSucio->getName() << std::endl;
+            cout << "LVPTS - El lavaplatos " << name << " está lavando el plato " << platoSucio->getName() << std::endl;
             // Cambiar el estado del plato a limpio
             platoSucio->cambiarLimpio();
             // Colocar el plato limpio en la pila de platos limpios
-            platosLimpios.push(platoSucio);
-            std::cout << "El plato " << platoSucio->getName() << " está limpio" << std::endl;
+            platosLimpios->push(platoSucio);
+            cout << "LVPTS - El plato " << platoSucio->getName() << " está limpio" << std::endl;
         }
     }
 
     // Agregar un plato sucio a la pila de platos sucios
     void agregarPlatoSucio(Plato* plato) {
-        platosSucios.push(plato);
+        platosSucios->push(plato);
     }
 
-    // Obtener un plato limpio de la pila de platos limpios
+    /*// Obtener un plato limpio de la pila de platos limpios
     Plato* obtenerPlatoLimpio() {
-        if (!platosLimpios.isEmpty()) {
-            return static_cast<Plato*>(platosLimpios.pop());
+        if (!platosLimpios->isEmpty()) {
+            return platosLimpios->pop();
         }
         return nullptr; // La pila de platos limpios está vacía
-    }
+    }*/
 };

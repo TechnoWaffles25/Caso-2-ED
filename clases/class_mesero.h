@@ -16,13 +16,11 @@ private:
     queue* pedidosListos; // Cola donde van los pedidos terminados por los cocineros y serán recogidos por los meseros
     stack* platosSucios;
     vector<Cliente*>  restaurante; 
-    vector<Plato*> platosSuciosRestaurante;
 public:
-    Mesero(string pName, queue* pPedidosListos, vector<Cliente*>  pRestaurante, vector<Plato*> pPlatosSuciosRestaurante, stack* pPlatosSucios){
+    Mesero(string pName, queue* pPedidosListos, vector<Cliente*>  pRestaurante, stack* pPlatosSucios){
         name = pName;
         pedidosListos = pPedidosListos;
         restaurante = pRestaurante;
-        platosSuciosRestaurante = pPlatosSuciosRestaurante;
     }
 
     string getName(){
@@ -45,11 +43,11 @@ public:
         }
     }
 
-    void limpiarMesa() {
+    /*void limpiarMesa() {
         // Limpia la mesa y lleva el plato sucio dejado por la persona a la pila de platos sucios
-        for (Plato* plato : platosSuciosRestaurante) {
+        for (Plato* plato : platosSucios) {
                 platosSucios->push(plato);
                 cout << "MESERO - El mesero " << name << " recogio el plato sucio" << endl;
                 }
-    }
+    }*/
 };

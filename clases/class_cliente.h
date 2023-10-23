@@ -5,6 +5,7 @@
 #include <sstream>
 #include "class_randomgenerator.h"
 #include "class_plato.h"
+#include "listas/stack.h"
 #include "struct_pedido.h"
 using namespace std;
 class Cliente
@@ -15,17 +16,17 @@ class Cliente
         int* numeroOrden; /* Se settea con la funcion setNumeroOrden y es unico para cada cliente*/
         Pedido* pedido; /* Orden dada por un mesero, es un struct*/
         RandomGenerator randomGenerator; // Para generar su pedido y nombre random
-        vector<Plato*> platosSuciosRestaurante; // Lista de platos que ha comido el cliente
+        stack* platosSucios; // Lista de platos que ha comido el cliente
 
     public:
         static int contadorNumOrden; // Static variable para contar el numero de ordenes entre todos los clientes
         // Constrcutor
-        Cliente(vector<Plato*> pPlatosSuciosRestaurante){
+        Cliente(stack* pPlatosSucios){
             setName();
             setItem();
             setNumeroOrden();
             pedido = nullptr;
-            platosSuciosRestaurante = pPlatosSuciosRestaurante;
+            platosSucios = pPlatosSucios;
         }
 
         // Setters
@@ -62,7 +63,7 @@ class Cliente
 
         void comerMoncha(){
             Plato* platosucio = pedido->plato;
-            platosSuciosRestaurante.push_back(platosucio);
+            platosSucios->push(platosucio);
             cout << "CLIENTE - Se dejo el plato sucio en la mesa" << endl;
             cout << "CLIENTE - El cliente " << name << " comio y se fue del restaurante" << endl;
         }

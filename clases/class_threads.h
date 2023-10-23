@@ -9,6 +9,7 @@
 #include "class_cajero.h"
 #include "class_managerChefs.h"
 #include "class_managerMeseros.h"
+#include "class_managerLavaplatos.h"
 #include "listas/queue.h"
 #include "listas/stack.h"
 #include <list>
@@ -35,24 +36,30 @@ class threads
         ManagerCajero* managerCajero;
         ManagerChef* managerChef;
         ManagerMesero* managerMesero;
+        ManagerLavaplatos* managerLavaplatos;
 
         queue* fila_exterior;
         queue* pedidosPendientes;
         queue* pedidosListos;
 
+        stack* platosLimpios;
+        stack* platosSucios;
+
         vector<Cliente*> restaurante;
-        vector<Plato*> platosSuciosRestaurante;
 
     public:
         threads(ManagerCajero* pManagerCajero, ManagerChef* pManagerChef, ManagerMesero* pManagerMesero, queue* pFilaExterior, 
-                queue* pPedidosPendientes, queue* pPedidosListos, stack* pPlatosLimpios, 
-                vector<Cliente*>  pRestaurante, vector<Plato*> pPlatosSuciosRestaurante){
+                queue* pPedidosPendientes, queue* pPedidosListos, stack* pPlatosLimpios, stack* pPlatosSucios, 
+                vector<Cliente*>  pRestaurante){
             managerCajero = pManagerCajero;
             managerChef = pManagerChef;
             managerMesero = pManagerMesero;
 
             fila_exterior = pFilaExterior;
             restaurante = pRestaurante;
+
+            platosLimpios = pPlatosLimpios;
+            platosSucios = pPlatosSucios;
 
             pedidosPendientes = pPedidosPendientes;
             pedidosListos = pPedidosListos;
@@ -101,8 +108,7 @@ class threads
                 {
                     uniform_int_distribution<int> distribution(*tiempoEntreClientesMin, *tiempoEntreClientesMax);
                     int tiempoRandom = distribution(mt);
-
-                    Cliente *newCliente = new Cliente(platosSuciosRestaurante);
+                    Cliente *newCliente = new Cliente(platosSucios);
                     fila_exterior->enqueue(newCliente);
                     cout << "\nTHRD - Llego el cliente numero: " << i+1<< endl;
                     this_thread::sleep_for(tiempoRandom * seconds(1));
@@ -192,6 +198,38 @@ class threads
                     }
                 }
                 this_thread::sleep_for(1s);
+            }
+        }
+
+        void lavarPlatos(){
+            while (true){
+                int* tiempoLimpiarMin = simulacion.getTiempoLavaplatosMin();
+                int* tiempoLimpiarMax = simulacion.getTiempoLavaplatosMax();
+                // Create a random number generator engine
+                random_device rd;  // Seed the engine
+                mt19937 mt(rd());  // Mersenne Twister pseudo-random number generator
+                uniform_int_distribution<int> distribution(*tiempoLimpiarMin,*tiempoLimpiarMax);
+                if (!platosSucios->isEmpty()){
+                    this_thread::sleep_for(2s);
+                    for (Lavaplatos* lavaplatos : managerLavaplatos->getLavaplatos()){
+                        int tiempoRandom = distribution(mt);
+                        cout << "PRUEBA LAVAPLATOS 1" << endl;
+                        if (!platosSucios->isEmpty()) {
+                            cout << "PRUEBA LAVAPLATOS 2" << endl;
+                            void* platoVoid = platosSucios->pop();
+                            Plato* platoSucio = static_cast<Plato*>(platoVoid);
+                            // Simular el proceso de lavado
+                            cout << "LVPTS - El lavaplatos " << lavaplatos->getName() << " está lavando el plato " << platoSucio->getName() << std::endl;
+                            // Cambiar el estado del plato a limpio
+                            platoSucio->cambiarLimpio();
+                            // Colocar el plato limpio en la pila de platos limpios
+                            platosLimpios->push(platoSucio);
+                            cout << "LVPTS - El plato " << platoSucio->getName() << " está limpio" << std::endl;
+                        }
+                        this_thread::sleep_for(tiempoRandom * seconds(1));
+                    }
+                }
+                this_thread::sleep_for(50ms);
             }
         }
 };

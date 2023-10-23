@@ -10,6 +10,7 @@ int main(void)
     ManagerCajero *managerCajero = new ManagerCajero();
     ManagerChef *managerChef = new ManagerChef();
     ManagerMesero *managerMesero = new ManagerMesero();
+    ManagerLavaplatos *managerLavaplatos = new ManagerLavaplatos();
     
     queue *fila_exterior = new queue(); // Cola donde llegan primeramente los clientes, pueden entrar al restaurante o salir si esta muy lento
     queue *pedidosPendientes = new queue(); // Cola donde se van los pedidos apuntados por los cajeros
@@ -19,10 +20,9 @@ int main(void)
     stack *platosSucios = new stack(); // Accede a los platos que estan sucios
 
     vector<Cliente*> restaurante; // Lista doblemente enlazada donde se encuentran los clientes que estan en el restaurante
-    vector<Plato*> platosSuciosRestaurante; // Lista doblemente enlazada donde se encuentran los platos que estan en el restaurante
     
     threads thread(managerCajero, managerChef, managerMesero, fila_exterior, pedidosPendientes, 
-                    pedidosListos, platosLimpios, restaurante, platosSuciosRestaurante);
+                    pedidosListos, platosLimpios, platosSucios, restaurante);
 
     cout << "---------------------------------------------------------" << endl;
 
@@ -50,10 +50,17 @@ int main(void)
     }
     // Add meseros al manager de meseros
     for (int i = 0; i < *sim.getMeseros(); i++){
-        Mesero* pMesero = new Mesero("Mesero" + to_string(i), pedidosListos, restaurante, platosSuciosRestaurante, platosSucios);
+        Mesero* pMesero = new Mesero("Mesero" + to_string(i), pedidosListos, restaurante, platosSucios);
         managerMesero->addMesero(pMesero);
         vector<Mesero*> kk = managerMesero->getMesero();
         cout << "\nSe ha creado un mesero llamado " << pMesero->getName() << endl;
+    }
+    // Add lavaplatos al manager de lavaplatos
+    for (int i = 0; i < *sim.getLavaplatos(); i++){
+        Lavaplatos* pLavaplatos = new Lavaplatos("Lavaplatos" + to_string(i), platosSucios, platosLimpios);
+        managerLavaplatos->addLavaplatos(pLavaplatos);
+        vector<Lavaplatos*> kk = managerLavaplatos->getLavaplatos();
+        cout << "\nSe ha creado un lavaplatos llamado " << pLavaplatos->getName() << endl;
     }
 
     cout << "---------------------------------------------------------" << endl;
@@ -63,11 +70,14 @@ int main(void)
     std::thread threadCocinar(&threads::cocinarPedidos, &thread);
     std::thread threadServir(&threads::servirPedido, &thread);
     std::thread threadComer(&threads::clienteComer, &thread);
+    //std::thread threadLavarPlatos(&threads::lavarPlatos, &thread);
 
     llegadaClientesThread.detach();
     threadCargarClientesThread.detach();
     threadCocinar.detach();
     threadServir.detach();
     threadComer.join();
+    //threadLavarPlatos.join();
+
     cout<< "\nFIN DEL SIMULADOR" << endl;
 }
